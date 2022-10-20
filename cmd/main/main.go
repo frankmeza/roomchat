@@ -12,7 +12,9 @@ import (
 
 func main() {
 	dbConn := db.GetDbConnection()
-	if err := dbConn.AutoMigrate(&users.User{}); err != nil {
+
+	err := dbConn.AutoMigrate(&users.User{})
+	if err != nil {
 		panic(constants.DB_ERROR)
 	}
 
