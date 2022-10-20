@@ -1,9 +1,19 @@
 package constants
 
 const (
-	DB_ERROR   string = "dbConn is very virus"
-	DB_URL     string = "postgres://frankmeza@localhost:5432/roomchat"
-	EMAIL      string = "email"
-	ID         string = "id"
-	USER_SPECS string = "user_specs"
+	DB_ERROR    string = "dbConn is very virus"
+	DB_URL      string = "DB_URL"
+	EMAIL       string = "email"
+	ID          string = "id"
+	JWT_SECRET  string = "JWT_SECRET"
+	PASSWORD    string = "password"
+	SIGNING_KEY string = "SIGNING_KEY"
+	USER_SPECS  string = "user_specs"
+	USERNAME    string = "username"
+
+	BIO         string = "bio"
+	CURRENT_PIC string = "current_pic"
+	LOCATION    string = "location"
+	NAME        string = "name"
+	PICS        string = "pics"
 )
