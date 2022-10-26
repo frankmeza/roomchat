@@ -4,7 +4,7 @@ import (
 	"errors"
 
 	cc "github.com/frankmeza/roomchat/pkg/constants"
-	"github.com/frankmeza/roomchat/pkg/utils"
+	"github.com/frankmeza/roomchat/pkg/db"
 	"github.com/labstack/echo/v4"
 	"gorm.io/datatypes"
 	"gorm.io/gorm"
@@ -17,11 +17,11 @@ type GetUserParams struct {
 }
 
 func getUserById(
-	conn *gorm.DB,
+	dbConn *gorm.DB,
 	user *User,
 	id string,
 ) error {
-	result := conn.First(&user, "id = ?", id)
+	result := dbConn.First(&user, "select * where id = ?", id)
 	if errors.Is(result.Error, gorm.ErrRecordNotFound) {
 		return result.Error
 	}
@@ -30,7 +30,7 @@ func getUserById(
 }
 
 func getUserByParam(
-	conn *gorm.DB,
+	dbConn *gorm.DB,
 	user *User,
 	params GetUserParams,
 ) error {
@@ -40,14 +40,14 @@ func getUserByParam(
 	}
 
 	if params.ParamName == cc.ID {
-		getUserById(conn, user, params.ID)
+		getUserById(dbConn, user, params.ID)
 	}
 
 	query := datatypes.
 		JSONQuery(cc.USER_SPECS).
 		Equals(paramToUse, params.ParamName)
 
-	result := conn.Debug().Find(&user, query)
+	result := dbConn.Debug().Find(&user, query)
 	if errors.Is(result.Error, gorm.ErrRecordNotFound) {
 		return result.Error
 	}
@@ -55,31 +55,12 @@ func getUserByParam(
 	return nil
 }
 
-func createNewUser(
-	conn *gorm.DB,
-	user *User,
-	c echo.Context,
-) error {
-	if err := c.Bind(&user); err != nil {
-		return err
-	}
+func saveUserDb(c echo.Context, user *User) error {
+	dbConn := db.GetDbConnection()
 
-	result := conn.Debug().Create(&user)
-	if errors.Is(result.Error, gorm.ErrRecordNotFound) {
+	result := dbConn.Debug().Create(user)
+	if result.Error != nil {
 		return result.Error
-	}
-
-	return nil
-}
-
-func deleteUser(
-	conn *gorm.DB,
-	user *User,
-	c echo.Context,
-) error {
-	result := conn.Debug().Delete(&user)
-	if errors.Is(result.Error, gorm.ErrRecordNotFound) {
-		return utils.ReturnError("conn.Debug().Delete", result.Error)
 	}
 
 	return nil

@@ -10,6 +10,10 @@ import (
 	"github.com/labstack/echo/v4/middleware"
 )
 
+const (
+	HASH_COST = 10
+)
+
 type jwtClaims struct {
 	Name    string `json:"name"`
 	UUID    string `json:"uuid"`
@@ -17,8 +21,8 @@ type jwtClaims struct {
 	jwt.StandardClaims
 }
 
-func AddLoginAction(echoServer *echo.Echo) {
-	echoServer.GET("/login", handleLogin)
+func AddSignUpAction(echoServer *echo.Echo) {
+	echoServer.POST("/sign_up", handleSignUp)
 }
 
 func AddAuthActions(echoServer *echo.Echo) {

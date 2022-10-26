@@ -1,9 +1,9 @@
 package db
 
 import (
+	"fmt"
 	"os"
 
-	"github.com/frankmeza/roomchat/pkg/constants"
 	cc "github.com/frankmeza/roomchat/pkg/constants"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
@@ -14,7 +14,8 @@ func GetDbConnection() *gorm.DB {
 	dbConn, err := gorm.Open(postgresDb, &gorm.Config{})
 
 	if err != nil {
-		panic(constants.DB_ERROR)
+		fmt.Println("DB_ERROR IS ", err)
+		panic(cc.DB_ERROR)
 	}
 
 	return dbConn

@@ -9,6 +9,6 @@ func AddUserActions(echoServer *echo.Echo) {
 	echoServer.GET("/users/:email", handleGetUserByEmail)
 	echoServer.GET("/users/:id", handleGetUserById)
 
-	echoServer.DELETE("/users/:id", handleDestroyUser)
-	echoServer.POST("/users", handleCreateUser)
+	// echoServer.DELETE("/users/:id", handleDestroyUser)
+	// echoServer.POST("/users", HandleCreateUser)
 }
