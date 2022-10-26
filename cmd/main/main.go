@@ -11,6 +11,8 @@ import (
 	"github.com/labstack/echo/v4/middleware"
 )
 
+const HOST_AND_PORT string = "127.0.0.1:9990"
+
 func main() {
 	dbConn := db.GetDbConnection()
 
@@ -19,9 +21,8 @@ func main() {
 		panic(constants.DB_ERROR)
 	}
 
-	envFlag := flag.Int(
-		"dev", 0, "append -dev 1 to start server on :9990",
-	)
+	envMessage := "append -dev 1 to start locally on" + HOST_AND_PORT
+	envFlag := flag.Int("dev", 0, envMessage)
 
 	flag.Parse()
 	isDev := *envFlag == 1
@@ -36,7 +37,5 @@ func main() {
 	users.AddUserActions(server)
 	auth.AddSignUpAction(server)
 
-	server.Logger.Fatal(
-		server.Start("127.0.0.1:9990"),
-	)
+	server.Logger.Fatal(server.Start(HOST_AND_PORT))
 }
