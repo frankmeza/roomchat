@@ -1,12 +1,13 @@
 package users
 
 import (
-	"fmt"
 	"net/http"
 
 	cc "github.com/frankmeza/roomchat/pkg/constants"
 	"github.com/frankmeza/roomchat/pkg/db"
 	"github.com/labstack/echo/v4"
+	jsonMap "github.com/mitchellh/mapstructure"
+	"github.com/twinj/uuid"
 )
 
 func handleGetUsers(c echo.Context) error {
@@ -60,13 +61,34 @@ func handleGetUserByEmail(c echo.Context) error {
 	return c.JSON(http.StatusOK, user)
 }
 
-func HandleCreateUser(c echo.Context, user *User) (*User, error) {
-	err := saveUserDb(c, user)
+func HandleCreateUser(
+	c echo.Context,
+	userPropsPayload *UserProps,
+	generatePasswordString func(plaintext string) (string, error),
+) (User, error) {
+	uuidString := uuid.NewV4().String()
+
+	var user User
+	user.Uuid = uuidString
+
+	passwordHash, err := generatePasswordString(userPropsPayload.Password)
+	if err != nil {
+		return User{}, err
+	}
+
+	userPropsPayload.Password = string(passwordHash)
+	userPropsPayload.Uuid = uuidString
+
+	err = jsonMap.Decode(userPropsPayload, &user.UserProps)
+	if err != nil {
+		return User{}, err
+	}
+
+	err = saveUserDb(c, &user)
 	if err != nil {
 		return user, err
 	}
 
-	fmt.Println(user)
 	return user, nil
 }
 

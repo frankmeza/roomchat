@@ -17,6 +17,7 @@ type (
 	User struct {
 		UserDB
 		UserProps UserProps `gorm:"type:jsonb" json:"user_props"`
+		Uuid      string    `json:"uuid"`
 	}
 
 	UserProps struct {
@@ -28,5 +29,6 @@ type (
 		Password   string `json:"password"`
 		Pics       string `json:"pics"`
 		Username   string `json:"username"`
+		Uuid       string `json:"uuid"`
 	}
 )

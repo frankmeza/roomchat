@@ -5,8 +5,6 @@ import (
 
 	"github.com/frankmeza/roomchat/pkg/users"
 	"github.com/labstack/echo/v4"
-	jsonMap "github.com/mitchellh/mapstructure"
-	"golang.org/x/crypto/bcrypt"
 )
 
 // func handleLogin(c echo.Context) error {
@@ -34,40 +32,25 @@ import (
 // 	})
 // }
 
-func handleSignUp(c echo.Context) error {
+func handleSignUp(context echo.Context) error {
 	var userPropsPayload users.UserProps
 
-	err := c.Bind(&userPropsPayload)
+	err := context.Bind(&userPropsPayload)
 	if err != nil {
 		errorString := "handleSignUp error: " + err.Error()
-		return c.String(http.StatusBadRequest, errorString)
+		return context.String(http.StatusBadRequest, errorString)
 	}
 
-	passwordHash, err := bcrypt.GenerateFromPassword(
-		[]byte(userPropsPayload.Password),
-		HASH_COST,
+	savedUser, err := users.HandleCreateUser(
+		context,
+		&userPropsPayload,
+		generatePasswordString,
 	)
 
 	if err != nil {
-		errorString := "bcrypt.GenerateFromPassword error:" + err.Error()
-		return c.String(http.StatusBadRequest, errorString)
-	}
-
-	userPropsPayload.Password = string(passwordHash)
-
-	var user users.User
-	err = jsonMap.Decode(userPropsPayload, &user.UserProps)
-
-	if err != nil {
-		errorString := "jsonMap.Decode error: " + err.Error()
-		return c.String(http.StatusBadRequest, errorString)
-	}
-
-	savedUser, err := users.HandleCreateUser(c, &user)
-	if err != nil {
 		errorString := "users.HandleCreateUser error: " + err.Error()
-		return c.String(http.StatusBadRequest, errorString)
+		return context.String(http.StatusBadRequest, errorString)
 	}
 
-	return c.JSON(http.StatusCreated, savedUser)
+	return context.JSON(http.StatusCreated, savedUser)
 }
