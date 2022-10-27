@@ -1,11 +1,22 @@
 package users
 
-import "gorm.io/datatypes"
+import (
+	"time"
+
+	"gorm.io/gorm"
+)
 
 type (
+	UserDB struct {
+		ID        int            `gorm:"primaryKey;autoIncrement" json:"id"`
+		CreatedAt time.Time      `json:"created_at"`
+		UpdatedAt time.Time      `json:"updated_at"`
+		DeletedAt gorm.DeletedAt `gorm:"index" json:"deleted_at"`
+	}
+
 	User struct {
-		ID        int `gorm:"primaryKey;autoIncrement"`
-		UserProps datatypes.JSONMap
+		UserDB
+		UserProps UserProps `gorm:"type:jsonb" json:"user_props"`
 	}
 
 	UserProps struct {
