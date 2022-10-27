@@ -8,7 +8,7 @@ const (
 	JWT_SECRET  string = "JWT_SECRET"
 	PASSWORD    string = "password"
 	SIGNING_KEY string = "SIGNING_KEY"
-	USER_SPECS  string = "user_specs"
+	USER_PROPS  string = "user_props"
 	USERNAME    string = "username"
 
 	BIO         string = "bio"

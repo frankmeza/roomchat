@@ -21,7 +21,7 @@ func getUserById(
 	user *User,
 	id string,
 ) error {
-	result := dbConn.First(&user, "select * where id = ?", id)
+	result := dbConn.First(&user, id)
 	if errors.Is(result.Error, gorm.ErrRecordNotFound) {
 		return result.Error
 	}
@@ -44,7 +44,7 @@ func getUserByParam(
 	}
 
 	query := datatypes.
-		JSONQuery(cc.USER_SPECS).
+		JSONQuery(cc.USER_PROPS).
 		Equals(paramToUse, params.ParamName)
 
 	result := dbConn.Debug().Find(&user, query)
