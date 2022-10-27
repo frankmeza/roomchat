@@ -1,6 +1,10 @@
 package users
 
 import (
+	"database/sql/driver"
+	"encoding/json"
+	"errors"
+	"fmt"
 	"time"
 
 	"gorm.io/gorm"
@@ -32,3 +36,24 @@ type (
 		Uuid       string `json:"uuid"`
 	}
 )
+
+// from https://gorm.io/docs/data_types.html#Implements-Customized-Data-Type
+func (userProps *UserProps) Scan(incomingValue interface{}) error {
+	valueAsByteSlice, ok := incomingValue.([]byte)
+	if !ok {
+		return errors.New(
+			fmt.Sprint("error on userProps.Scan", incomingValue),
+		)
+	}
+
+	return json.Unmarshal([]byte(valueAsByteSlice), userProps)
+}
+
+func (userProps UserProps) Value() (driver.Value, error) {
+	value, err := json.Marshal(&userProps)
+	if err != nil {
+		return nil, err
+	}
+
+	return value, nil
+}
