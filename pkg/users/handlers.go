@@ -86,7 +86,7 @@ func HandleCreateUser(
 
 	err = saveUserDb(c, &user)
 	if err != nil {
-		return user, err
+		return User{}, err
 	}
 
 	return user, nil
