@@ -5,6 +5,7 @@ import (
 
 	"github.com/frankmeza/roomchat/pkg/auth"
 	cc "github.com/frankmeza/roomchat/pkg/constants"
+	"github.com/frankmeza/roomchat/pkg/errata"
 	"github.com/frankmeza/roomchat/pkg/utils"
 	"github.com/labstack/echo/v4"
 )
@@ -21,7 +22,12 @@ func handleGetUserByUsername(context echo.Context) error {
 
 	foundUser, err := actionGetUserByUsername(username, cc.NO_PASSWORD, false)
 	if err != nil {
-		return utils.ReturnError("actionGetUserByUsername", err)
+		return errata.HandlerError(errata.HandlerErrorParams{
+			CallingFn: "actionGetUserByUsername",
+			Context:   context,
+			Err:       err,
+			Status:    http.StatusBadRequest,
+		})
 	}
 
 	return context.JSON(http.StatusOK, foundUser)

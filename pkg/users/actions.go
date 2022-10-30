@@ -6,30 +6,25 @@ import (
 	"github.com/frankmeza/roomchat/pkg/auth"
 	cc "github.com/frankmeza/roomchat/pkg/constants"
 	"github.com/frankmeza/roomchat/pkg/db"
-	jsonMap "github.com/mitchellh/mapstructure"
 	"github.com/twinj/uuid"
 )
 
 func actionCreateUser(userPropsPayload *UserProps) (User, error) {
-	uuidString := uuid.NewV4().String()
-
 	var user User
-	user.Uuid = uuidString
+	uuidString := uuid.NewV4().String()
 
 	passwordHash, err := auth.GeneratePasswordString(userPropsPayload.Password)
 	if err != nil {
 		return User{}, err
 	}
 
-	userPropsPayload.Password = string(passwordHash)
-	userPropsPayload.Uuid = uuidString
+	err = useUsersAPI().CreateUser(
+		&user,
+		userPropsPayload,
+		string(passwordHash),
+		uuidString,
+	)
 
-	err = jsonMap.Decode(userPropsPayload, &user.UserProps)
-	if err != nil {
-		return User{}, err
-	}
-
-	err = saveUserDb(&user)
 	if err != nil {
 		return User{}, err
 	}
@@ -46,14 +41,6 @@ func actionGetUsers(users *[]User) error {
 	}
 
 	return nil
-	// if result.Error != nil {
-	// 	return c.String(
-	// 		http.StatusNotFound,
-	// 		result.Error.Error(),
-	// 	)
-	// }
-
-	// return c.JSON(http.StatusOK, users)
 }
 
 // func actionGetUserById(c echo.Context) error {
