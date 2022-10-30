@@ -30,10 +30,9 @@ func (api UsersAPI) CreateUser(
 }
 
 func (api UsersAPI) SaveUser(user *User) error {
-	err := saveUserDb(user)
-	if err != nil {
-		return err
-	}
+	return saveUserDb(user)
+}
 
-	return nil
+func (api UsersAPI) GetUserByParam(user *User, params GetUserParams) error {
+	return getUserDbByParam(user, params)
 }
