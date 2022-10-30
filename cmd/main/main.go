@@ -3,7 +3,6 @@ package main
 import (
 	"flag"
 
-	"github.com/frankmeza/roomchat/pkg/auth"
 	"github.com/frankmeza/roomchat/pkg/constants"
 	"github.com/frankmeza/roomchat/pkg/db"
 	"github.com/frankmeza/roomchat/pkg/users"
@@ -35,7 +34,6 @@ func main() {
 	}
 
 	users.AddUserActions(server)
-	auth.AddSignUpAction(server)
 
 	server.Logger.Fatal(server.Start(HOST_AND_PORT))
 }

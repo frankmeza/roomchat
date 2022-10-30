@@ -3,113 +3,79 @@ package users
 import (
 	"net/http"
 
+	"github.com/frankmeza/roomchat/pkg/auth"
 	cc "github.com/frankmeza/roomchat/pkg/constants"
-	"github.com/frankmeza/roomchat/pkg/db"
+	"github.com/frankmeza/roomchat/pkg/utils"
 	"github.com/labstack/echo/v4"
-	jsonMap "github.com/mitchellh/mapstructure"
-	"github.com/twinj/uuid"
 )
 
-func handleGetUsers(c echo.Context) error {
-	dbConn := db.GetDbConnection()
-	users := []User{}
+func handleGetUsers(context echo.Context) error {
+	var users []User
+	actionGetUsers(&users)
 
-	result := dbConn.Find(&users)
-	if result.Error != nil {
-		return c.String(
-			http.StatusNotFound,
-			result.Error.Error(),
+	return context.JSON(http.StatusOK, users)
+}
+
+func handleGetUserByUsername(context echo.Context) error {
+	username := context.Param(cc.USERNAME)
+
+	foundUser, err := actionGetUserByUsername(username, cc.NO_PASSWORD, false)
+	if err != nil {
+		return utils.ReturnError("actionGetUserByUsername", err)
+	}
+
+	return context.JSON(http.StatusOK, foundUser)
+}
+
+func handleSignUp(context echo.Context) error {
+	var userPropsPayload UserProps
+
+	err := context.Bind(&userPropsPayload)
+	if err != nil {
+		errorString := "handleSignUp error: " + err.Error()
+		return context.String(http.StatusBadRequest, errorString)
+	}
+
+	savedUser, err := actionCreateUser(&userPropsPayload)
+	if err != nil {
+		errorString := "actionCreateUser error: " + err.Error()
+		return context.String(http.StatusBadRequest, errorString)
+	}
+
+	return context.JSON(http.StatusCreated, savedUser)
+}
+
+// todo - add support for email along with username
+func handleLogin(context echo.Context) error {
+	username := context.Param(cc.USERNAME)
+	password := context.Param(cc.PASSWORD)
+
+	foundUser, err := actionGetUserByUsername(username, password, true)
+	if err != nil {
+		return utils.ReturnError("actionGetUserByUsername", err)
+	}
+
+	doesPasswordMatch := auth.CheckPasswordHash(
+		foundUser.UserProps.Password,
+		password,
+	)
+
+	if !doesPasswordMatch {
+		return context.String(
+			http.StatusBadRequest,
+			cc.LOGIN_ERROR,
 		)
 	}
 
-	return c.JSON(http.StatusOK, users)
-}
-
-func handleGetUserById(c echo.Context) error {
-	dbConn := db.GetDbConnection()
-	id := c.Param(cc.ID)
-
-	user := &User{}
-	params := GetUserParams{ID: id, ParamName: cc.ID}
-
-	err := getUserByParam(dbConn, user, params)
+	tokenString, err := auth.GeneratePasswordString(password)
 	if err != nil {
-		return c.String(
-			http.StatusNotFound,
-			err.Error(),
+		return context.String(
+			http.StatusBadRequest,
+			cc.LOGIN_ERROR,
 		)
 	}
 
-	return c.JSON(http.StatusOK, user)
+	return context.JSON(http.StatusOK, echo.Map{
+		"token": tokenString,
+	})
 }
-
-func handleGetUserByEmail(c echo.Context) error {
-	dbConn := db.GetDbConnection()
-	email := c.Param(cc.EMAIL)
-
-	user := &User{}
-	params := GetUserParams{Email: email, ParamName: cc.EMAIL}
-
-	err := getUserByParam(dbConn, user, params)
-	if err != nil {
-		return c.String(
-			http.StatusNotFound,
-			err.Error(),
-		)
-	}
-
-	return c.JSON(http.StatusOK, user)
-}
-
-func HandleCreateUser(
-	c echo.Context,
-	userPropsPayload *UserProps,
-	generatePasswordString func(plaintext string) (string, error),
-) (User, error) {
-	uuidString := uuid.NewV4().String()
-
-	var user User
-	user.Uuid = uuidString
-
-	passwordHash, err := generatePasswordString(userPropsPayload.Password)
-	if err != nil {
-		return User{}, err
-	}
-
-	userPropsPayload.Password = string(passwordHash)
-	userPropsPayload.Uuid = uuidString
-
-	err = jsonMap.Decode(userPropsPayload, &user.UserProps)
-	if err != nil {
-		return User{}, err
-	}
-
-	err = saveUserDb(c, &user)
-	if err != nil {
-		return User{}, err
-	}
-
-	return user, nil
-}
-
-// func handleDestroyUser(c echo.Context) error {
-// 	dbConn := db.GetDbConnection()
-// 	id := c.Param(cc.ID)
-
-// 	user := &User{}
-// 	params := GetUserParams{ID: id, ParamName: cc.ID}
-
-// 	err := getUserByParam(dbConn, user, params)
-// 	if err != nil {
-// 		return c.String(
-// 			http.StatusNotFound,
-// 			err.Error(),
-// 		)
-// 	}
-
-// 	if err := deleteUser(dbConn, user, c); err != nil {
-// 		return err
-// 	}
-
-// 	return c.NoContent(http.StatusOK)
-// }

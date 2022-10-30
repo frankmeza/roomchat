@@ -6,6 +6,7 @@ const (
 	EMAIL       string = "email"
 	ID          string = "id"
 	JWT_SECRET  string = "JWT_SECRET"
+	NO_PASSWORD string = "NO_PASSWORD"
 	PASSWORD    string = "password"
 	SIGNING_KEY string = "SIGNING_KEY"
 	USER_PROPS  string = "user_props"
@@ -16,4 +17,6 @@ const (
 	LOCATION    string = "location"
 	NAME        string = "name"
 	PICS        string = "pics"
+
+	LOGIN_ERROR string = "username or password is not correct"
 )

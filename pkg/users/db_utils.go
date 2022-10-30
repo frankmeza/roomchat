@@ -5,7 +5,6 @@ import (
 
 	cc "github.com/frankmeza/roomchat/pkg/constants"
 	"github.com/frankmeza/roomchat/pkg/db"
-	"github.com/labstack/echo/v4"
 	"gorm.io/datatypes"
 	"gorm.io/gorm"
 )
@@ -14,13 +13,19 @@ type GetUserParams struct {
 	Email     string
 	ID        string
 	ParamName string
+	Username  string
 }
 
-func getUserById(
-	dbConn *gorm.DB,
-	user *User,
-	id string,
-) error {
+func getUsersDb(dbConn *gorm.DB, users *[]User) error {
+	result := dbConn.First(&users)
+	if errors.Is(result.Error, gorm.ErrRecordNotFound) {
+		return result.Error
+	}
+
+	return nil
+}
+
+func getUserById(dbConn *gorm.DB, user *User, id string) error {
 	result := dbConn.First(&user, id)
 	if errors.Is(result.Error, gorm.ErrRecordNotFound) {
 		return result.Error
@@ -29,11 +34,7 @@ func getUserById(
 	return result.Error
 }
 
-func getUserByParam(
-	dbConn *gorm.DB,
-	user *User,
-	params GetUserParams,
-) error {
+func getUserByParam(dbConn *gorm.DB, user *User, params GetUserParams) error {
 	var paramToUse interface{}
 	if params.ParamName == cc.EMAIL {
 		paramToUse = params.Email
@@ -41,6 +42,10 @@ func getUserByParam(
 
 	if params.ParamName == cc.ID {
 		getUserById(dbConn, user, params.ID)
+	}
+
+	if params.ParamName == cc.USERNAME {
+		paramToUse = params.Username
 	}
 
 	query := datatypes.
@@ -55,7 +60,7 @@ func getUserByParam(
 	return nil
 }
 
-func saveUserDb(c echo.Context, user *User) error {
+func saveUserDb(user *User) error {
 	dbConn := db.GetDbConnection()
 
 	result := dbConn.Debug().Create(user)
