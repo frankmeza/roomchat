@@ -2,6 +2,7 @@ package users
 
 import (
 	"github.com/frankmeza/roomchat/pkg/auth"
+	"github.com/frankmeza/roomchat/pkg/constants"
 	"github.com/frankmeza/roomchat/pkg/errata"
 	"github.com/twinj/uuid"
 )
@@ -40,4 +41,34 @@ func handleSignUpMacro(user *User, userPropsPayload *UserProps) error {
 	}
 
 	return nil
+}
+
+func handleLoginMacro(user *User, username, password string) (string, error) {
+	params := GetUserParams{Username: username, ParamName: constants.USERNAME}
+
+	err := getUserDbByParam(user, params)
+	if err != nil {
+		return "", errata.CreateError(errata.ErrataParams{
+			Err:     err,
+			ErrFunc: "handleLoginMacro getUserDbByParam",
+		})
+	}
+
+	doesPasswordMatch := auth.CheckPasswordHash(user.UserProps.Password, password)
+	if !doesPasswordMatch {
+		return "", errata.CreateError(errata.ErrataParams{
+			Err:     err,
+			ErrFunc: "handleLoginMacro auth.CheckPasswordHash doesn't match",
+		})
+	}
+
+	tokenString, err := auth.GeneratePasswordString(password)
+	if err != nil {
+		return "", errata.CreateError(errata.ErrataParams{
+			Err:     err,
+			ErrFunc: "handleLoginMacro auth.GeneratePasswordString",
+		})
+	}
+
+	return tokenString, nil
 }

@@ -38,6 +38,45 @@ func handleSignUp(context echo.Context) error {
 	})
 }
 
+type handleLoginParams struct {
+	Password string `json:"password"`
+	Username string `json:"username"`
+}
+
+// todo - add support for email along with username
+func handleLogin(context echo.Context) error {
+	var params handleLoginParams
+	var user User
+
+	err := context.Bind(&params)
+	if err != nil {
+		return response.HandlerError(response.HandlerErrorParams{
+			Context: context,
+			Err:     err,
+			ErrFunc: "handleLogin context.Bind",
+			Status:  http.StatusBadRequest,
+		})
+	}
+
+	token, err := handleLoginMacro(&user, params.Username, params.Password)
+	if err != nil {
+		return response.HandlerError(response.HandlerErrorParams{
+			Context: context,
+			Err:     err,
+			ErrFunc: "handleLogin handleLoginMacro",
+			Status:  http.StatusBadRequest,
+		})
+	}
+
+	return response.HandlerSuccess(response.HandlerSuccessParams{
+		Context: context,
+		Payload: map[string]interface{}{
+			"token": token,
+		},
+		Status: http.StatusOK,
+	})
+}
+
 // func handleGetUsers(context echo.Context) error {
 // 	var users []User
 // 	actionGetUsers(&users)
@@ -81,39 +120,4 @@ func handleSignUp(context echo.Context) error {
 // 	}
 
 // 	return context.JSON(http.StatusCreated, savedUser)
-// }
-
-// // todo - add support for email along with username
-// func handleLogin(context echo.Context) error {
-// 	username := context.Param(cc.USERNAME)
-// 	password := context.Param(cc.PASSWORD)
-
-// 	foundUser, err := actionGetUserByUsername(username, password, true)
-// 	if err != nil {
-// 		return utils.ReturnError("actionGetUserByUsername", err)
-// 	}
-
-// 	doesPasswordMatch := auth.CheckPasswordHash(
-// 		foundUser.UserProps.Password,
-// 		password,
-// 	)
-
-// 	if !doesPasswordMatch {
-// 		return context.String(
-// 			http.StatusBadRequest,
-// 			cc.LOGIN_ERROR,
-// 		)
-// 	}
-
-// 	tokenString, err := auth.GeneratePasswordString(password)
-// 	if err != nil {
-// 		return context.String(
-// 			http.StatusBadRequest,
-// 			cc.LOGIN_ERROR,
-// 		)
-// 	}
-
-// 	return context.JSON(http.StatusOK, echo.Map{
-// 		"token": tokenString,
-// 	})
 // }

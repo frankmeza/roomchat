@@ -1,8 +1,12 @@
 package users
 
 import (
+	"fmt"
+
+	"github.com/frankmeza/roomchat/pkg/constants"
 	"github.com/frankmeza/roomchat/pkg/db"
 	"github.com/frankmeza/roomchat/pkg/errata"
+	"gorm.io/datatypes"
 )
 
 func saveUserDb(user *User) error {
@@ -25,21 +29,52 @@ func saveUserDb(user *User) error {
 	return nil
 }
 
-// import (
-// 	"errors"
+type GetUserParams struct {
+	Email     string
+	ID        string
+	ParamName string
+	Username  string
+}
 
-// 	cc "github.com/frankmeza/roomchat/pkg/constants"
-// 	"github.com/frankmeza/roomchat/pkg/db"
-// 	"gorm.io/datatypes"
-// 	"gorm.io/gorm"
-// )
+func getUserDbByParam(user *User, params GetUserParams) error {
+	dbConn, err := db.GetDbConnection()
+	if err != nil {
+		return errata.CreateError(errata.ErrataParams{
+			Err:     err,
+			ErrFunc: "getUserDbByParam db.GetDbConnection",
+		})
+	}
 
-// type GetUserParams struct {
-// 	Email     string
-// 	ID        string
-// 	ParamName string
-// 	Username  string
-// }
+	var paramToUse interface{}
+
+	if params.ParamName == constants.EMAIL {
+		paramToUse = params.Email
+	}
+
+	if params.ParamName == constants.ID {
+		paramToUse = params.ID
+	}
+
+	if params.ParamName == constants.USERNAME {
+		paramToUse = params.Username
+	}
+
+	query := datatypes.
+		JSONQuery(constants.USER_PROPS).
+		Equals(paramToUse, params.ParamName)
+
+	result := dbConn.Debug().Find(&user, query)
+	fmt.Println("getUserDbByParam params", params.Username)
+
+	if result.Error != nil {
+		return errata.CreateError(errata.ErrataParams{
+			Err:     result.Error,
+			ErrFunc: "getUserDbByParam db.GetDbConnection",
+		})
+	}
+
+	return nil
+}
 
 // func getUsersDb(dbConn *gorm.DB, users *[]User) error {
 // 	result := dbConn.First(&users)
@@ -57,30 +92,4 @@ func saveUserDb(user *User) error {
 // 	}
 
 // 	return result.Error
-// }
-
-// func getUserByParam(dbConn *gorm.DB, user *User, params GetUserParams) error {
-// 	var paramToUse interface{}
-// 	if params.ParamName == cc.EMAIL {
-// 		paramToUse = params.Email
-// 	}
-
-// 	if params.ParamName == cc.ID {
-// 		getUserById(dbConn, user, params.ID)
-// 	}
-
-// 	if params.ParamName == cc.USERNAME {
-// 		paramToUse = params.Username
-// 	}
-
-// 	query := datatypes.
-// 		JSONQuery(cc.USER_PROPS).
-// 		Equals(paramToUse, params.ParamName)
-
-// 	result := dbConn.Debug().Find(&user, query)
-// 	if errors.Is(result.Error, gorm.ErrRecordNotFound) {
-// 		return result.Error
-// 	}
-
-// 	return nil
 // }

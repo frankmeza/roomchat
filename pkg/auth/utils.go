@@ -17,7 +17,7 @@ func GeneratePasswordString(plaintext string) (string, error) {
 	return string(passwordHash), nil
 }
 
-func CheckPasswordHash(password, hash string) bool {
+func CheckPasswordHash(hash, password string) bool {
 	err := bcrypt.CompareHashAndPassword(
 		[]byte(hash), []byte(password),
 	)
