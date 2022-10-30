@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"time"
 
+	"github.com/frankmeza/roomchat/pkg/errata"
 	"gorm.io/gorm"
 )
 
@@ -41,9 +42,10 @@ type (
 func (userProps *UserProps) Scan(incomingValue interface{}) error {
 	valueAsByteSlice, ok := incomingValue.([]byte)
 	if !ok {
-		return errors.New(
-			fmt.Sprint("error on userProps.Scan", incomingValue),
-		)
+		return errata.CreateError(errata.ErrataParams{
+			Err:     errors.New(fmt.Sprint("", incomingValue)),
+			ErrFunc: "UserProps Scan",
+		})
 	}
 
 	return json.Unmarshal([]byte(valueAsByteSlice), userProps)
@@ -52,7 +54,10 @@ func (userProps *UserProps) Scan(incomingValue interface{}) error {
 func (userProps UserProps) Value() (driver.Value, error) {
 	value, err := json.Marshal(&userProps)
 	if err != nil {
-		return nil, err
+		return nil, errata.CreateError(errata.ErrataParams{
+			Err:     err,
+			ErrFunc: "UserProps Scan",
+		})
 	}
 
 	return value, nil

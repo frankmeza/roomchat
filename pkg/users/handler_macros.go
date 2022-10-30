@@ -46,7 +46,7 @@ func handleSignUpMacro(user *User, userPropsPayload *UserProps) error {
 func handleLoginMacro(user *User, username, password string) (string, error) {
 	params := GetUserParams{Username: username, ParamName: constants.USERNAME}
 
-	err := getUserDbByParam(user, params)
+	err := useUsersAPI().GetUserByParam(user, params)
 	if err != nil {
 		return "", errata.CreateError(errata.ErrataParams{
 			Err:     err,
@@ -54,7 +54,11 @@ func handleLoginMacro(user *User, username, password string) (string, error) {
 		})
 	}
 
-	doesPasswordMatch := auth.CheckPasswordHash(user.UserProps.Password, password)
+	doesPasswordMatch := auth.CheckPasswordHash(auth.CheckPasswordHashParams{
+		Hash:     user.UserProps.Password,
+		Password: password,
+	})
+
 	if !doesPasswordMatch {
 		return "", errata.CreateError(errata.ErrataParams{
 			Err:     err,
@@ -62,7 +66,11 @@ func handleLoginMacro(user *User, username, password string) (string, error) {
 		})
 	}
 
-	tokenString, err := auth.GeneratePasswordString(password)
+	tokenString, err := auth.GenerateTokenString(auth.GenerateTokenStringParams{
+		Password: password,
+		Username: username,
+	})
+
 	if err != nil {
 		return "", errata.CreateError(errata.ErrataParams{
 			Err:     err,

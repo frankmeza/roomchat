@@ -1,6 +1,9 @@
 package users
 
-import jsonMap "github.com/mitchellh/mapstructure"
+import (
+	"github.com/frankmeza/roomchat/pkg/errata"
+	jsonMap "github.com/mitchellh/mapstructure"
+)
 
 type UsersAPI struct {
 	apiType string
@@ -23,7 +26,10 @@ func (api UsersAPI) CreateUser(
 
 	err := jsonMap.Decode(userPropsPayload, &user.UserProps)
 	if err != nil {
-		return err
+		return errata.CreateError(errata.ErrataParams{
+			Err:     err,
+			ErrFunc: "CreateUser jsonMap.Decode",
+		})
 	}
 
 	return nil

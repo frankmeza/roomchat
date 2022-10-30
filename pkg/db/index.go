@@ -4,6 +4,7 @@ import (
 	"os"
 
 	cc "github.com/frankmeza/roomchat/pkg/constants"
+	"github.com/frankmeza/roomchat/pkg/errata"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 )
@@ -13,7 +14,10 @@ func GetDbConnection() (*gorm.DB, error) {
 	dbConn, err := gorm.Open(postgresDb, &gorm.Config{})
 
 	if err != nil {
-		return nil, err
+		return nil, errata.CreateError(errata.ErrataParams{
+			Err:     err,
+			ErrFunc: "GetDbConnection gorm.Open",
+		})
 	}
 
 	return dbConn, nil

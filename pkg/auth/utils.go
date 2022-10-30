@@ -1,6 +1,12 @@
 package auth
 
 import (
+	"os"
+
+	"github.com/frankmeza/roomchat/pkg/constants"
+	"github.com/frankmeza/roomchat/pkg/errata"
+	"github.com/golang-jwt/jwt"
+	"github.com/twinj/uuid"
 	"golang.org/x/crypto/bcrypt"
 )
 
@@ -11,34 +17,50 @@ func GeneratePasswordString(plaintext string) (string, error) {
 	)
 
 	if err != nil {
-		return "", err
+		return "", errata.CreateError(errata.ErrataParams{
+			Err:     err,
+			ErrFunc: "GeneratePasswordString bcrypt.GenerateFromPassword",
+		})
 	}
 
 	return string(passwordHash), nil
 }
 
-func CheckPasswordHash(hash, password string) bool {
+type CheckPasswordHashParams struct {
+	Hash     string
+	Password string
+}
+
+func CheckPasswordHash(params CheckPasswordHashParams) bool {
 	err := bcrypt.CompareHashAndPassword(
-		[]byte(hash), []byte(password),
+		[]byte(params.Hash), []byte(params.Password),
 	)
 
 	return err == nil
 }
 
-// func generateTokenString(username, password string) (string, error) {
-// 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwtClaims{
-// 		IsAdmin: true,
-// 		Name:    username + password,
-// 		UUID:    uuid.NewV4().String(),
-// 	})
+type GenerateTokenStringParams struct {
+	Password string
+	Username string
+}
 
-// 	tokenAsString, err := token.SignedString(
-// 		[]byte(os.Getenv(cc.JWT_SECRET)),
-// 	)
+func GenerateTokenString(params GenerateTokenStringParams) (string, error) {
+	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwtClaims{
+		IsAdmin: true,
+		Name:    params.Username + params.Password,
+		UUID:    uuid.NewV4().String(),
+	})
 
-// 	if err != nil {
-// 		return "", err
-// 	}
+	tokenAsString, err := token.SignedString(
+		[]byte(os.Getenv(constants.JWT_SECRET)),
+	)
 
-// 	return tokenAsString, nil
-// }
+	if err != nil {
+		return "", errata.CreateError(errata.ErrataParams{
+			Err:     err,
+			ErrFunc: "GenerateTokenString token.SignedString",
+		})
+	}
+
+	return tokenAsString, nil
+}

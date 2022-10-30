@@ -1,8 +1,6 @@
 package users
 
 import (
-	"fmt"
-
 	"github.com/frankmeza/roomchat/pkg/constants"
 	"github.com/frankmeza/roomchat/pkg/db"
 	"github.com/frankmeza/roomchat/pkg/errata"
@@ -64,7 +62,6 @@ func getUserDbByParam(user *User, params GetUserParams) error {
 		Equals(paramToUse, params.ParamName)
 
 	result := dbConn.Debug().Find(&user, query)
-	fmt.Println("getUserDbByParam params", params.Username)
 
 	if result.Error != nil {
 		return errata.CreateError(errata.ErrataParams{
