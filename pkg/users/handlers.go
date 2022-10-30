@@ -72,6 +72,7 @@ func handleLogin(context echo.Context) error {
 		Context: context,
 		Payload: map[string]interface{}{
 			"token": token,
+			"user":  user,
 		},
 		Status: http.StatusOK,
 	})
