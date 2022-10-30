@@ -7,10 +7,10 @@ import (
 	"github.com/twinj/uuid"
 )
 
-func handleSignUpMacro(user *User, userPropsPayload *UserProps) error {
+func handleSignUpMacro(user *User, userProps *UserProps) error {
 	uuidString := uuid.NewV4().String()
 
-	passwordHash, err := auth.GeneratePasswordString(userPropsPayload.Password)
+	passwordHash, err := auth.GeneratePasswordString(userProps.Password)
 	if err != nil {
 		return errata.CreateError(errata.ErrataParams{
 			Err:     err,
@@ -20,7 +20,7 @@ func handleSignUpMacro(user *User, userPropsPayload *UserProps) error {
 
 	err = useUsersAPI().CreateUser(
 		user,
-		userPropsPayload,
+		userProps,
 		string(passwordHash),
 		uuidString,
 	)
@@ -45,8 +45,16 @@ func handleSignUpMacro(user *User, userPropsPayload *UserProps) error {
 
 func handleLoginMacro(user *User, params handleLoginParams) (string, error) {
 	getUserParams := GetUserParams{
-		Username:  params.Username,
-		ParamName: constants.USERNAME,
+		Email:    params.Email,
+		Username: params.Username,
+	}
+
+	if getUserParams.Email != "" {
+		getUserParams.ParamName = constants.EMAIL
+	}
+
+	if getUserParams.Username != "" {
+		getUserParams.ParamName = constants.USERNAME
 	}
 
 	err := useUsersAPI().GetUserByParam(user, getUserParams)

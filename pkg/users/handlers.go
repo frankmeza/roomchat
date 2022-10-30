@@ -9,9 +9,9 @@ import (
 
 func handleSignUp(context echo.Context) error {
 	var user User
-	var userPropsPayload UserProps
+	var userProps UserProps
 
-	err := context.Bind(&userPropsPayload)
+	err := context.Bind(&userProps)
 	if err != nil {
 		return response.HandlerError(response.HandlerErrorParams{
 			Context: context,
@@ -21,7 +21,7 @@ func handleSignUp(context echo.Context) error {
 		})
 	}
 
-	err = handleSignUpMacro(&user, &userPropsPayload)
+	err = handleSignUpMacro(&user, &userProps)
 	if err != nil {
 		return response.HandlerError(response.HandlerErrorParams{
 			Context: context,
@@ -39,6 +39,7 @@ func handleSignUp(context echo.Context) error {
 }
 
 type handleLoginParams struct {
+	Email    string `json:"email"`
 	Password string `json:"password"`
 	Username string `json:"username"`
 }
