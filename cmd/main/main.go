@@ -3,8 +3,8 @@ package main
 import (
 	"flag"
 
-	"github.com/frankmeza/roomchat/pkg/constants"
 	"github.com/frankmeza/roomchat/pkg/db"
+	"github.com/frankmeza/roomchat/pkg/errata"
 	"github.com/frankmeza/roomchat/pkg/users"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
@@ -13,11 +13,20 @@ import (
 const HOST_AND_PORT string = "127.0.0.1:9990"
 
 func main() {
-	dbConn := db.GetDbConnection()
-
-	err := dbConn.AutoMigrate(&users.User{})
+	dbConn, err := db.GetDbConnection()
 	if err != nil {
-		panic(constants.DB_ERROR)
+		panic(errata.CreateError(errata.ErrataParams{
+			Err:     err,
+			ErrFunc: "main db.GetDbConnection",
+		}))
+	}
+
+	err = dbConn.AutoMigrate(&users.User{})
+	if err != nil {
+		panic(errata.CreateError(errata.ErrataParams{
+			Err:     err,
+			ErrFunc: "main dbConn.AutoMigrate",
+		}))
 	}
 
 	envMessage := "append -dev 1 to start locally on" + HOST_AND_PORT

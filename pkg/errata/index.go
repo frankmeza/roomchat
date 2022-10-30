@@ -1,24 +1,16 @@
 package errata
 
 import (
+	"errors"
 	"fmt"
-
-	"github.com/labstack/echo/v4"
 )
 
-// handlers return http.status errors, they call actions
-// actions return action (object, errors); they call api, utils
-// api return api error, mutate container object; they call db
-
-type HandlerErrorParams struct {
-	CallingFn string
-	Context   echo.Context
-	Err       error
-	Status    int
+type ErrataParams struct {
+	ErrFunc string
+	Err     error
 }
 
-func HandlerError(params HandlerErrorParams) error {
-	errorMessage := fmt.Sprintf(params.CallingFn, "caused error:", params.Err)
-
-	return params.Context.String(params.Status, errorMessage)
+func CreateError(params ErrataParams) error {
+	errorMessage := fmt.Sprintf(params.ErrFunc, "caused error:", params.Err)
+	return errors.New(errorMessage)
 }

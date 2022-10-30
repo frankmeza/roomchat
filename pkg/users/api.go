@@ -26,16 +26,11 @@ func (api UsersAPI) CreateUser(
 		return err
 	}
 
-	err = saveUserDb(user)
-	if err != nil {
-		return err
-	}
+	return nil
+}
 
-	if err != nil {
-		return err
-	}
-
-	err = saveUserDb(user)
+func (api UsersAPI) SaveUser(user *User) error {
+	err := saveUserDb(user)
 	if err != nil {
 		return err
 	}
