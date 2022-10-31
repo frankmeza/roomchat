@@ -11,16 +11,16 @@ func saveUserDb(user *User) error {
 	dbConn, err := db.GetDbConnection()
 	if err != nil {
 		return errata.CreateError(errata.ErrataParams{
-			Err:     err,
-			ErrFunc: "saveUserDb db.GetDbConnection",
+			Err:    err,
+			ErrMsg: "saveUserDb db.GetDbConnection",
 		})
 	}
 
 	result := dbConn.Debug().Create(user)
 	if result.Error != nil {
 		return errata.CreateError(errata.ErrataParams{
-			Err:     result.Error,
-			ErrFunc: "saveUserDb dbConn.Debug().Create",
+			Err:    result.Error,
+			ErrMsg: "saveUserDb dbConn.Debug().Create",
 		})
 	}
 
@@ -32,29 +32,44 @@ type GetUserParams struct {
 	ID        string
 	ParamName string
 	Username  string
+	Uuid      string
+}
+
+func getParamToUse(params GetUserParams) string {
+	if params.ParamName == constants.EMAIL {
+		return params.Email
+	}
+
+	if params.ParamName == constants.ID {
+		return params.ID
+	}
+
+	if params.ParamName == constants.USERNAME {
+		return params.Username
+	}
+
+	if params.ParamName == constants.UUID {
+		return params.Username
+	}
+
+	return ""
 }
 
 func getUserDbByParam(user *User, params GetUserParams) error {
 	dbConn, err := db.GetDbConnection()
 	if err != nil {
 		return errata.CreateError(errata.ErrataParams{
-			Err:     err,
-			ErrFunc: "getUserDbByParam db.GetDbConnection",
+			Err:    err,
+			ErrMsg: "getUserDbByParam db.GetDbConnection",
 		})
 	}
 
-	var paramToUse interface{}
-
-	if params.ParamName == constants.EMAIL {
-		paramToUse = params.Email
-	}
-
-	if params.ParamName == constants.ID {
-		paramToUse = params.ID
-	}
-
-	if params.ParamName == constants.USERNAME {
-		paramToUse = params.Username
+	paramToUse := getParamToUse(params)
+	if paramToUse == "" {
+		return errata.CreateError(errata.ErrataParams{
+			Err:    err,
+			ErrMsg: "getUserDbByParam getParamToUse",
+		})
 	}
 
 	query := datatypes.
@@ -62,11 +77,10 @@ func getUserDbByParam(user *User, params GetUserParams) error {
 		Equals(paramToUse, params.ParamName)
 
 	result := dbConn.Debug().Find(&user, query)
-
 	if result.Error != nil {
 		return errata.CreateError(errata.ErrataParams{
-			Err:     result.Error,
-			ErrFunc: "getUserDbByParam db.GetDbConnection",
+			Err:    result.Error,
+			ErrMsg: "getUserDbByParam db.GetDbConnection",
 		})
 	}
 

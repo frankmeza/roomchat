@@ -15,7 +15,7 @@ func handleMakeConnection(context echo.Context) error {
 		return response.HandlerError(response.HandlerErrorParams{
 			Context: context,
 			Err:     err,
-			ErrFunc: "handleMakeConnection context.Bind",
+			ErrMsg:  "handleMakeConnection context.Bind",
 			Status:  http.StatusBadRequest,
 		})
 	}
@@ -25,7 +25,7 @@ func handleMakeConnection(context echo.Context) error {
 		return response.HandlerError(response.HandlerErrorParams{
 			Context: context,
 			Err:     err,
-			ErrFunc: "handleMakeConnection handleMakeConnectionMacro",
+			ErrMsg:  "handleMakeConnection handleMakeConnectionMacro",
 			Status:  http.StatusBadRequest,
 		})
 	}

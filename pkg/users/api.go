@@ -9,7 +9,7 @@ type UsersAPI struct {
 	apiType string
 }
 
-func useUsersAPI() UsersAPI {
+func UseUsersAPI() UsersAPI {
 	return UsersAPI{apiType: "users"}
 }
 
@@ -27,8 +27,8 @@ func (api UsersAPI) CreateUser(
 	err := jsonMap.Decode(userPropsPayload, &user.UserProps)
 	if err != nil {
 		return errata.CreateError(errata.ErrataParams{
-			Err:     err,
-			ErrFunc: "CreateUser jsonMap.Decode",
+			Err:    err,
+			ErrMsg: "CreateUser jsonMap.Decode",
 		})
 	}
 

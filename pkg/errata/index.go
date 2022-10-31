@@ -6,11 +6,11 @@ import (
 )
 
 type ErrataParams struct {
-	ErrFunc string
-	Err     error
+	ErrMsg string
+	Err    error
 }
 
 func CreateError(params ErrataParams) error {
-	errorMessage := fmt.Sprintf(params.ErrFunc, "caused error:", params.Err)
+	errorMessage := fmt.Sprintf(params.ErrMsg, "caused error:", params.Err)
 	return errors.New(errorMessage)
 }

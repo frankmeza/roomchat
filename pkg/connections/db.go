@@ -9,16 +9,16 @@ func saveConnectionDb(connection *Connection) error {
 	dbConn, err := db.GetDbConnection()
 	if err != nil {
 		return errata.CreateError(errata.ErrataParams{
-			Err:     err,
-			ErrFunc: "saveConnectionDb db.GetDbConnection",
+			Err:    err,
+			ErrMsg: "saveConnectionDb db.GetDbConnection",
 		})
 	}
 
 	result := dbConn.Debug().Create(connection)
 	if result.Error != nil {
 		return errata.CreateError(errata.ErrataParams{
-			Err:     result.Error,
-			ErrFunc: "saveConnectionDb dbConn.Debug().Create",
+			Err:    result.Error,
+			ErrMsg: "saveConnectionDb dbConn.Debug().Create",
 		})
 	}
 

@@ -23,8 +23,8 @@ func GetDbConnection() (*gorm.DB, error) {
 
 	if err != nil {
 		return nil, errata.CreateError(errata.ErrataParams{
-			Err:     err,
-			ErrFunc: "GetDbConnection gorm.Open",
+			Err:    err,
+			ErrMsg: "GetDbConnection gorm.Open",
 		})
 	}
 

@@ -8,12 +8,12 @@ import (
 
 type HandlerErrorParams struct {
 	Context echo.Context
-	ErrFunc string
+	ErrMsg  string
 	Err     error
 	Status  int
 }
 
 func HandlerError(params HandlerErrorParams) error {
-	errorMessage := fmt.Sprintf(params.ErrFunc, "caused error:", params.Err)
+	errorMessage := fmt.Sprintf(params.ErrMsg, "caused error:", params.Err)
 	return params.Context.String(params.Status, errorMessage)
 }

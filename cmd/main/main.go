@@ -16,16 +16,16 @@ func main() {
 	dbConn, err := db.GetDbConnection()
 	if err != nil {
 		panic(errata.CreateError(errata.ErrataParams{
-			Err:     err,
-			ErrFunc: "main db.GetDbConnection",
+			Err:    err,
+			ErrMsg: "main db.GetDbConnection",
 		}))
 	}
 
 	err = dbConn.AutoMigrate(&users.User{})
 	if err != nil {
 		panic(errata.CreateError(errata.ErrataParams{
-			Err:     err,
-			ErrFunc: "main dbConn.AutoMigrate",
+			Err:    err,
+			ErrMsg: "main dbConn.AutoMigrate",
 		}))
 	}
 

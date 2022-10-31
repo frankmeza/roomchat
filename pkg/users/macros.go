@@ -13,12 +13,12 @@ func handleSignUpMacro(user *User, userProps *UserProps) error {
 	passwordHash, err := auth.GeneratePasswordString(userProps.Password)
 	if err != nil {
 		return errata.CreateError(errata.ErrataParams{
-			Err:     err,
-			ErrFunc: "handleSignUpMacro auth.GeneratePasswordString",
+			Err:    err,
+			ErrMsg: "handleSignUpMacro auth.GeneratePasswordString",
 		})
 	}
 
-	err = useUsersAPI().CreateUser(
+	err = UseUsersAPI().CreateUser(
 		user,
 		userProps,
 		string(passwordHash),
@@ -27,16 +27,16 @@ func handleSignUpMacro(user *User, userProps *UserProps) error {
 
 	if err != nil {
 		return errata.CreateError(errata.ErrataParams{
-			Err:     err,
-			ErrFunc: "handleSignUpMacro useUsersAPI().CreateUser",
+			Err:    err,
+			ErrMsg: "handleSignUpMacro UseUsersAPI().CreateUser",
 		})
 	}
 
-	err = useUsersAPI().SaveUser(user)
+	err = UseUsersAPI().SaveUser(user)
 	if err != nil {
 		return errata.CreateError(errata.ErrataParams{
-			Err:     err,
-			ErrFunc: "handleSignUpMacro useUsersAPI().SaveUser",
+			Err:    err,
+			ErrMsg: "handleSignUpMacro UseUsersAPI().SaveUser",
 		})
 	}
 
@@ -57,11 +57,11 @@ func handleLoginMacro(user *User, params handleLoginParams) (string, error) {
 		getUserParams.ParamName = constants.USERNAME
 	}
 
-	err := useUsersAPI().GetUserByParam(user, getUserParams)
+	err := UseUsersAPI().GetUserByParam(user, getUserParams)
 	if err != nil {
 		return "", errata.CreateError(errata.ErrataParams{
-			Err:     err,
-			ErrFunc: "handleLoginMacro getUserDbByParam",
+			Err:    err,
+			ErrMsg: "handleLoginMacro getUserDbByParam",
 		})
 	}
 
@@ -72,8 +72,8 @@ func handleLoginMacro(user *User, params handleLoginParams) (string, error) {
 
 	if !doesPasswordMatch {
 		return "", errata.CreateError(errata.ErrataParams{
-			Err:     err,
-			ErrFunc: "handleLoginMacro auth.CheckPasswordHash doesn't match",
+			Err:    err,
+			ErrMsg: "handleLoginMacro auth.CheckPasswordHash doesn't match",
 		})
 	}
 
@@ -84,8 +84,8 @@ func handleLoginMacro(user *User, params handleLoginParams) (string, error) {
 
 	if err != nil {
 		return "", errata.CreateError(errata.ErrataParams{
-			Err:     err,
-			ErrFunc: "handleLoginMacro auth.GeneratePasswordString",
+			Err:    err,
+			ErrMsg: "handleLoginMacro auth.GeneratePasswordString",
 		})
 	}
 

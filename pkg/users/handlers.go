@@ -16,7 +16,7 @@ func handleSignUp(context echo.Context) error {
 		return response.HandlerError(response.HandlerErrorParams{
 			Context: context,
 			Err:     err,
-			ErrFunc: "handleSignUp context.Bind",
+			ErrMsg:  "handleSignUp context.Bind",
 			Status:  http.StatusBadRequest,
 		})
 	}
@@ -26,7 +26,7 @@ func handleSignUp(context echo.Context) error {
 		return response.HandlerError(response.HandlerErrorParams{
 			Context: context,
 			Err:     err,
-			ErrFunc: "handleSignUp handleSignUpMacro",
+			ErrMsg:  "handleSignUp handleSignUpMacro",
 			Status:  http.StatusBadRequest,
 		})
 	}
@@ -53,7 +53,7 @@ func handleLogin(context echo.Context) error {
 		return response.HandlerError(response.HandlerErrorParams{
 			Context: context,
 			Err:     err,
-			ErrFunc: "handleLogin context.Bind",
+			ErrMsg:  "handleLogin context.Bind",
 			Status:  http.StatusBadRequest,
 		})
 	}
@@ -63,7 +63,7 @@ func handleLogin(context echo.Context) error {
 		return response.HandlerError(response.HandlerErrorParams{
 			Context: context,
 			Err:     err,
-			ErrFunc: "handleLogin handleLoginMacro",
+			ErrMsg:  "handleLogin handleLoginMacro",
 			Status:  http.StatusBadRequest,
 		})
 	}

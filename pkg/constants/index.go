@@ -11,6 +11,7 @@ const (
 	SIGNING_KEY string = "SIGNING_KEY"
 	USER_PROPS  string = "user_props"
 	USERNAME    string = "username"
+	UUID        string = "uuid"
 
 	BIO         string = "bio"
 	CURRENT_PIC string = "current_pic"
