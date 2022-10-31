@@ -72,21 +72,3 @@ func getUserDbByParam(user *User, params GetUserParams) error {
 
 	return nil
 }
-
-// func getUsersDb(dbConn *gorm.DB, users *[]User) error {
-// 	result := dbConn.First(&users)
-// 	if errors.Is(result.Error, gorm.ErrRecordNotFound) {
-// 		return result.Error
-// 	}
-
-// 	return nil
-// }
-
-// func getUserById(dbConn *gorm.DB, user *User, id string) error {
-// 	result := dbConn.First(&user, id)
-// 	if errors.Is(result.Error, gorm.ErrRecordNotFound) {
-// 		return result.Error
-// 	}
-
-// 	return result.Error
-// }
