@@ -5,22 +5,14 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"time"
 
+	"github.com/frankmeza/roomchat/pkg/db"
 	"github.com/frankmeza/roomchat/pkg/errata"
-	"gorm.io/gorm"
 )
 
 type (
-	UserDB struct {
-		ID        int            `gorm:"primaryKey;autoIncrement" json:"id"`
-		CreatedAt time.Time      `json:"created_at"`
-		UpdatedAt time.Time      `json:"updated_at"`
-		DeletedAt gorm.DeletedAt `gorm:"index" json:"deleted_at"`
-	}
-
 	User struct {
-		UserDB
+		db.DbRecord
 		UserProps UserProps `gorm:"type:jsonb" json:"user_props"`
 		Uuid      string    `json:"uuid"`
 	}
