@@ -44,7 +44,6 @@ type handleLoginParams struct {
 	Username string `json:"username"`
 }
 
-// todo - add support for email along with username
 func handleLogin(context echo.Context) error {
 	var params handleLoginParams
 	var user User
