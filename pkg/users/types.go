@@ -12,9 +12,9 @@ import (
 
 type (
 	User struct {
-		db.DbRecord
 		UserProps UserProps `gorm:"type:jsonb" json:"user_props"`
 		Uuid      string    `json:"uuid"`
+		db.DbRecord
 	}
 
 	UserProps struct {
