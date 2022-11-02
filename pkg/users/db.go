@@ -10,18 +10,12 @@ import (
 func saveUserDb(user *User) error {
 	dbConn, err := db.GetDbConnection()
 	if err != nil {
-		return errata.CreateError(errata.ErrataParams{
-			Err:    err,
-			ErrMsg: "saveUserDb db.GetDbConnection",
-		})
+		return errata.CreateError("saveUserDb db.GetDbConnection", err)
 	}
 
 	result := dbConn.Debug().Create(user)
 	if result.Error != nil {
-		return errata.CreateError(errata.ErrataParams{
-			Err:    result.Error,
-			ErrMsg: "saveUserDb dbConn.Debug().Create",
-		})
+		return errata.CreateError("saveUserDb dbConn.Debug().Create", err)
 	}
 
 	return nil
@@ -49,7 +43,7 @@ func getParamToUse(params GetUserParams) string {
 	}
 
 	if params.ParamName == constants.UUID {
-		return params.Username
+		return params.Uuid
 	}
 
 	return ""
@@ -58,18 +52,12 @@ func getParamToUse(params GetUserParams) string {
 func getUserDbByParam(user *User, params GetUserParams) error {
 	dbConn, err := db.GetDbConnection()
 	if err != nil {
-		return errata.CreateError(errata.ErrataParams{
-			Err:    err,
-			ErrMsg: "getUserDbByParam db.GetDbConnection",
-		})
+		return errata.CreateError("getUserDbByParam db.GetDbConnection", err)
 	}
 
 	paramToUse := getParamToUse(params)
 	if paramToUse == "" {
-		return errata.CreateError(errata.ErrataParams{
-			Err:    err,
-			ErrMsg: "getUserDbByParam getParamToUse",
-		})
+		return errata.CreateError("getUserDbByParam getParamToUse", err)
 	}
 
 	query := datatypes.
@@ -78,10 +66,7 @@ func getUserDbByParam(user *User, params GetUserParams) error {
 
 	result := dbConn.Debug().Find(&user, query)
 	if result.Error != nil {
-		return errata.CreateError(errata.ErrataParams{
-			Err:    result.Error,
-			ErrMsg: "getUserDbByParam db.GetDbConnection",
-		})
+		return errata.CreateError("getUserDbByParam db.GetDbConnection", err)
 	}
 
 	return nil

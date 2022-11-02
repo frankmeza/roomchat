@@ -28,10 +28,7 @@ func GetDbConnection() (*gorm.DB, error) {
 	dbConn, err := gorm.Open(postgresDb, &gorm.Config{})
 
 	if err != nil {
-		return nil, errata.CreateError(errata.ErrataParams{
-			Err:    err,
-			ErrMsg: "GetDbConnection gorm.Open",
-		})
+		return nil, errata.CreateError("GetDbConnection gorm.Open", err)
 	}
 
 	return dbConn, nil

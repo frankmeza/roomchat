@@ -4,7 +4,6 @@ import (
 	"database/sql/driver"
 	"encoding/json"
 	"errors"
-	"fmt"
 
 	"github.com/frankmeza/roomchat/pkg/db"
 	"github.com/frankmeza/roomchat/pkg/errata"
@@ -34,10 +33,7 @@ type (
 func (userProps *UserProps) Scan(incomingValue interface{}) error {
 	valueAsByteSlice, ok := incomingValue.([]byte)
 	if !ok {
-		return errata.CreateError(errata.ErrataParams{
-			Err:    errors.New(fmt.Sprint("", incomingValue)),
-			ErrMsg: "UserProps Scan",
-		})
+		return errata.CreateError("UserProps Scan", errors.New(""))
 	}
 
 	return json.Unmarshal([]byte(valueAsByteSlice), userProps)
@@ -46,10 +42,7 @@ func (userProps *UserProps) Scan(incomingValue interface{}) error {
 func (userProps UserProps) Value() (driver.Value, error) {
 	value, err := json.Marshal(&userProps)
 	if err != nil {
-		return nil, errata.CreateError(errata.ErrataParams{
-			Err:    err,
-			ErrMsg: "UserProps Scan",
-		})
+		return nil, errata.CreateError("UserProps Scan", err)
 	}
 
 	return value, nil

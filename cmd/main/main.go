@@ -31,18 +31,12 @@ func addPkgActions(server *echo.Echo) {
 func main() {
 	dbConn, err := db.GetDbConnection()
 	if err != nil {
-		panic(errata.CreateError(errata.ErrataParams{
-			Err:    err,
-			ErrMsg: "main db.GetDbConnection",
-		}))
+		panic(errata.CreateError("main db.GetDbConnection", err))
 	}
 
 	err = makeDbMigrations(dbConn)
 	if err != nil {
-		panic(errata.CreateError(errata.ErrataParams{
-			Err:    err,
-			ErrMsg: "main dbConn.AutoMigrate",
-		}))
+		panic(errata.CreateError("main dbConn.AutoMigrate", err))
 	}
 
 	envMessage := "append -dev 1 to start locally " + HOST_AND_PORT
