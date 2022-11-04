@@ -75,7 +75,7 @@ func getConnectionDbByParam(
 ) error {
 	dbConn, err := db.GetDbConnection()
 	if err != nil {
-		return errata.CreateError("getConnectionDbByParam db.GetDbConnection", err)
+		return errata.CreateError("getConnectionDbByParam GetDbConnection", err)
 	}
 
 	paramToUse := getParamToUse(params)
@@ -89,7 +89,7 @@ func getConnectionDbByParam(
 
 	result := dbConn.Debug().Find(&connection, query)
 	if result.Error != nil {
-		return errata.CreateError("getConnectionDbByParam db.GetDbConnection", err)
+		return errata.CreateError("getConnectionDbByParam Find", err)
 	}
 
 	return nil

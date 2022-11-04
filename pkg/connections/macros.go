@@ -6,19 +6,24 @@ import (
 	"github.com/frankmeza/roomchat/pkg/constants"
 	"github.com/frankmeza/roomchat/pkg/errata"
 	"github.com/frankmeza/roomchat/pkg/users"
+	"github.com/twinj/uuid"
 )
 
-func handleMakeConnectionMacro(params handleMakeConnectionParams) (Connection, error) {
+func handleMakeConnectionMacro(
+	params handleMakeConnectionParams,
+) (Connection, error) {
 	var verifiedUsers []users.User
 
 	userUuids := []string{params.Message.FromUser, params.Message.ToUser}
 	for _, userUuid := range userUuids {
 		var verifiedUser users.User
 
-		users.UseUsersAPI().GetUserByParam(&verifiedUser, users.GetUserParams{
-			ParamName: constants.UUID,
-			Uuid:      userUuid,
-		})
+		users.UseUsersAPI().GetUserByParam(
+			&verifiedUser, users.GetUserParams{
+				ParamName: constants.UUID,
+				Uuid:      userUuid,
+			},
+		)
 
 		verifiedUsers = append(verifiedUsers, verifiedUser)
 	}
@@ -31,7 +36,7 @@ func handleMakeConnectionMacro(params handleMakeConnectionParams) (Connection, e
 	err := useConnectionsAPI().SaveMessage(&params.Message)
 	if err != nil {
 		return Connection{},
-			errata.CreateError("handleMakeConnectionMacro SaveConnection", err)
+			errata.CreateError("handleMakeConnectionMacro SaveMessage", err)
 	}
 
 	connection := Connection{
@@ -39,6 +44,7 @@ func handleMakeConnectionMacro(params handleMakeConnectionParams) (Connection, e
 		Location: params.Location,
 		Messages: []Message{params.Message},
 		ToUser:   params.Message.ToUser,
+		Uuid:     uuid.NewV4().String(),
 	}
 
 	err = useConnectionsAPI().SaveConnection(&connection)
@@ -70,6 +76,7 @@ func handleAddMessageMacro(params handleAddMessageParams) error {
 	}
 
 	newMessage := Message{FromUser: params.FromUser, ToUser: toUser}
+
 	err = useConnectionsAPI().SaveMessage(&newMessage)
 	if err != nil {
 		return errata.CreateError("handleAddMessageMacro SaveMessage", err)

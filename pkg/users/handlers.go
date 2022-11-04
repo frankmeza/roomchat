@@ -77,3 +77,11 @@ func handleLogin(context echo.Context) error {
 		Status: http.StatusOK,
 	})
 }
+
+func handleUpdateUser(context echo.Context) error {
+	return response.HandlerSuccess(response.HandlerSuccessParams{
+		Context: context,
+		Payload: map[string]string{"user": "so lit"},
+		Status:  http.StatusOK,
+	})
+}

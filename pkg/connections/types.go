@@ -16,7 +16,7 @@ type (
 		Location   string    `json:"location"`
 		Messages   []Message `gorm:"type:jsonb" json:"messages"`
 		ToUser     string    `json:"to_user"`
-		Uuid       string
+		Uuid       string    `json:"uuid"`
 		db.DbRecord
 	}
 

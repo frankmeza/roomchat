@@ -17,7 +17,8 @@ func GeneratePasswordString(plaintext string) (string, error) {
 	)
 
 	if err != nil {
-		return "", errata.CreateError("GeneratePasswordString bcrypt.GenerateFromPassword", err)
+		return "",
+			errata.CreateError("GeneratePasswordString bcrypt.GenerateFromPassword", err)
 	}
 
 	return string(passwordHash), nil
@@ -30,7 +31,8 @@ type CheckPasswordHashParams struct {
 
 func CheckPasswordHash(params CheckPasswordHashParams) bool {
 	err := bcrypt.CompareHashAndPassword(
-		[]byte(params.Hash), []byte(params.Password),
+		[]byte(params.Hash),
+		[]byte(params.Password),
 	)
 
 	return err == nil
@@ -53,7 +55,8 @@ func GenerateTokenString(params GenerateTokenStringParams) (string, error) {
 	)
 
 	if err != nil {
-		return "", errata.CreateError("GenerateTokenString token.SignedString", err)
+		return "",
+			errata.CreateError("GenerateTokenString token.SignedString", err)
 	}
 
 	return tokenAsString, nil

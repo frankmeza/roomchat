@@ -36,6 +36,10 @@ func (api UsersAPI) SaveUser(user *User) error {
 	return saveUserDb(user)
 }
 
+func (api UsersAPI) UpdateUser(user *User) error {
+	return saveUserDb(user)
+}
+
 func (api UsersAPI) GetUserByParam(user *User, params GetUserParams) error {
 	return getUserDbByParam(user, params)
 }

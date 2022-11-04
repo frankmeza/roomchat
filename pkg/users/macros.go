@@ -12,7 +12,7 @@ func handleSignUpMacro(user *User, userProps *UserProps) error {
 
 	passwordHash, err := auth.GeneratePasswordString(userProps.Password)
 	if err != nil {
-		return errata.CreateError("handleSignUpMacro auth.GeneratePasswordString", err)
+		return errata.CreateError("handleSignUpMacro GeneratePasswordString", err)
 	}
 
 	err = UseUsersAPI().CreateUser(
@@ -23,12 +23,12 @@ func handleSignUpMacro(user *User, userProps *UserProps) error {
 	)
 
 	if err != nil {
-		return errata.CreateError("handleSignUpMacro UseUsersAPI().CreateUser", err)
+		return errata.CreateError("handleSignUpMacro CreateUser", err)
 	}
 
 	err = UseUsersAPI().SaveUser(user)
 	if err != nil {
-		return errata.CreateError("handleSignUpMacro UseUsersAPI().SaveUser", err)
+		return errata.CreateError("handleSignUpMacro SaveUser", err)
 	}
 
 	return nil
@@ -50,7 +50,7 @@ func handleLoginMacro(user *User, params handleLoginParams) (string, error) {
 
 	err := UseUsersAPI().GetUserByParam(user, getUserParams)
 	if err != nil {
-		return "", errata.CreateError("handleLoginMacro getUserDbByParam", err)
+		return "", errata.CreateError("handleLoginMacro GetUserByParam", err)
 	}
 
 	doesPasswordMatch := auth.CheckPasswordHash(auth.CheckPasswordHashParams{
