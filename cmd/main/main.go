@@ -16,7 +16,7 @@ const HOST_AND_PORT string = "127.0.0.1:9990"
 
 func makeDbMigrations(dbConn *gorm.DB) error {
 	return dbConn.AutoMigrate(
-		&connections.Connection{},
+		&connections.ConnectionProps{},
 		&connections.Message{},
 		&users.User{},
 	)
@@ -45,13 +45,13 @@ func main() {
 	flag.Parse()
 	isDev := *envFlag == 1
 
-	server := echo.New()
+	echoServer := echo.New()
 
 	if isDev {
-		server.Use(middleware.Logger())
-		server.Use(middleware.Recover())
+		echoServer.Use(middleware.Logger())
+		echoServer.Use(middleware.Recover())
 	}
 
-	addPkgActions(server)
-	server.Logger.Fatal(server.Start(HOST_AND_PORT))
+	addPkgActions(echoServer)
+	echoServer.Logger.Fatal(echoServer.Start(HOST_AND_PORT))
 }

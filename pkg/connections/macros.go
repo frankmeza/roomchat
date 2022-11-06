@@ -6,7 +6,6 @@ import (
 	"github.com/frankmeza/roomchat/pkg/constants"
 	"github.com/frankmeza/roomchat/pkg/errata"
 	"github.com/frankmeza/roomchat/pkg/users"
-	"github.com/twinj/uuid"
 )
 
 func handleMakeConnectionMacro(
@@ -39,13 +38,7 @@ func handleMakeConnectionMacro(
 			errata.CreateError("handleMakeConnectionMacro SaveMessage", err)
 	}
 
-	connection := Connection{
-		FromUser: params.Message.FromUser,
-		Location: params.Location,
-		Messages: []Message{params.Message},
-		ToUser:   params.Message.ToUser,
-		Uuid:     uuid.NewV4().String(),
-	}
+	connection := useConnectionsAPI().CreateConnection(params)
 
 	err = useConnectionsAPI().SaveConnection(&connection)
 	if err != nil {
@@ -70,9 +63,12 @@ func handleAddMessageMacro(params handleAddMessageParams) error {
 		return errata.CreateError("handleAddMessageMacro GetConnectionByParam", err)
 	}
 
-	toUser := connection.FromUser
-	if params.FromUser == connection.FromUser {
-		toUser = connection.ToUser
+	var toUser string
+
+	if params.FromUser == connection.ConnectionProps.FromUser {
+		toUser = connection.ConnectionProps.ToUser
+	} else {
+		toUser = connection.ConnectionProps.FromUser
 	}
 
 	newMessage := Message{FromUser: params.FromUser, ToUser: toUser}
