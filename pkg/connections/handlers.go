@@ -66,7 +66,7 @@ func handleAddMessage(context echo.Context) error {
 		return response.HandlerError(response.HandlerErrorParams{
 			Context: context,
 			Err:     err,
-			ErrMsg:  "handleAddMessage context.Bind",
+			ErrMsg:  "handleAddMessage handleAddMessageMacro",
 			Status:  http.StatusBadRequest,
 		})
 	}

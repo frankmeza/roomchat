@@ -42,7 +42,7 @@ func (userProps *UserProps) Scan(incomingValue interface{}) error {
 func (userProps UserProps) Value() (driver.Value, error) {
 	value, err := json.Marshal(&userProps)
 	if err != nil {
-		return nil, errata.CreateError("UserProps Scan", err)
+		return nil, errata.CreateError("UserProps Value", err)
 	}
 
 	return value, nil

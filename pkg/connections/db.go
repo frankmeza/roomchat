@@ -1,6 +1,8 @@
 package connections
 
 import (
+	"fmt"
+
 	"github.com/frankmeza/roomchat/pkg/constants"
 	"github.com/frankmeza/roomchat/pkg/db"
 	"github.com/frankmeza/roomchat/pkg/errata"
@@ -25,18 +27,20 @@ func updateConnectionDb(updatedConnection *Connection) error {
 		return errata.CreateError("cannot update connection with this id", err)
 	}
 
+	// save new state
+
 	return nil
 }
 
 func saveConnectionDb(connection *Connection) error {
 	dbConn, err := db.GetDbConnection()
 	if err != nil {
-		return errata.CreateError("saveConnectionDb db.GetDbConnection", err)
+		return errata.CreateError("saveConnectionDb GetDbConnection", err)
 	}
 
 	result := dbConn.Debug().Create(connection)
 	if result.Error != nil {
-		return errata.CreateError("saveConnectionDb dbConn.Debug().Create", err)
+		return errata.CreateError("saveConnectionDb Create", result.Error)
 	}
 
 	return nil
@@ -45,12 +49,12 @@ func saveConnectionDb(connection *Connection) error {
 func saveMessageDb(Message *Message) error {
 	dbConn, err := db.GetDbConnection()
 	if err != nil {
-		return errata.CreateError("saveMessageDb db.GetDbMessage", err)
+		return errata.CreateError("saveMessageDb GetDbMessage", err)
 	}
 
 	result := dbConn.Debug().Create(Message)
 	if result.Error != nil {
-		return errata.CreateError("saveMessageDb dbConn.Debug().Create", err)
+		return errata.CreateError("saveMessageDb Create", result.Error)
 	}
 
 	return nil
@@ -84,8 +88,10 @@ func getConnectionDbByParam(
 	}
 
 	query := datatypes.
-		JSONQuery(constants.USER_PROPS).
+		JSONQuery(constants.CONNECTIONS).
 		Equals(paramToUse, params.ParamName)
+
+	fmt.Println("query is", query)
 
 	result := dbConn.Debug().Find(&connection, query)
 	if result.Error != nil {

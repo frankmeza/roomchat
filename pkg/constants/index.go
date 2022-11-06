@@ -1,6 +1,7 @@
 package constants
 
 const (
+	CONNECTIONS string = "connections"
 	DB_ERROR    string = "dbConn is very virus"
 	DB_URL      string = "DB_URL"
 	EMAIL       string = "email"
