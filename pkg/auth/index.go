@@ -6,7 +6,7 @@ const (
 	HASH_COST = 10
 )
 
-type jwtClaims struct {
+type JwtClaims struct {
 	Name    string `json:"name"`
 	UUID    string `json:"uuid"`
 	IsAdmin bool   `json:"admin"`

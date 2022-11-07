@@ -29,13 +29,17 @@ type CheckPasswordHashParams struct {
 	Password string
 }
 
-func CheckPasswordHash(params CheckPasswordHashParams) bool {
+func CheckPasswordHash(params CheckPasswordHashParams) error {
 	err := bcrypt.CompareHashAndPassword(
 		[]byte(params.Hash),
 		[]byte(params.Password),
 	)
 
-	return err == nil
+	if err != nil {
+		return err
+	}
+
+	return nil
 }
 
 type GenerateTokenStringParams struct {
@@ -44,7 +48,7 @@ type GenerateTokenStringParams struct {
 }
 
 func GenerateTokenString(params GenerateTokenStringParams) (string, error) {
-	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwtClaims{
+	token := jwt.NewWithClaims(jwt.SigningMethodHS256, JwtClaims{
 		IsAdmin: true,
 		Name:    params.Username + params.Password,
 		UUID:    uuid.NewV4().String(),

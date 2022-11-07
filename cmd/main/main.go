@@ -3,6 +3,7 @@ package main
 import (
 	"flag"
 
+	"github.com/frankmeza/roomchat/pkg/auth"
 	"github.com/frankmeza/roomchat/pkg/connections"
 	"github.com/frankmeza/roomchat/pkg/db"
 	"github.com/frankmeza/roomchat/pkg/errata"
@@ -22,9 +23,10 @@ func makeDbMigrations(dbConn *gorm.DB) error {
 	)
 }
 
-func addPkgActions(server *echo.Echo) {
-	users.AddUserActions(server)
-	connections.AddConnectionActions(server)
+func addPkgActions(server *echo.Echo, authorizedGroup *echo.Group) {
+	users.AddAuthenticationActions(server)
+
+	connections.AddConnectionActions(authorizedGroup)
 }
 
 // basically fossilized at this point
@@ -52,6 +54,15 @@ func main() {
 		echoServer.Use(middleware.Recover())
 	}
 
-	addPkgActions(echoServer)
+	authorizedGroup := echoServer.Group("/auth")
+
+	config := middleware.JWTConfig{
+		Claims:     &auth.JwtClaims{},
+		SigningKey: []byte("secret"),
+	}
+
+	authorizedGroup.Use(middleware.JWTWithConfig(config))
+	addPkgActions(echoServer, authorizedGroup)
+
 	echoServer.Logger.Fatal(echoServer.Start(HOST_AND_PORT))
 }

@@ -53,12 +53,12 @@ func handleLoginMacro(user *User, params handleLoginParams) (string, error) {
 		return "", errata.CreateError("handleLoginMacro GetUserByParam", err)
 	}
 
-	doesPasswordMatch := auth.CheckPasswordHash(auth.CheckPasswordHashParams{
+	err = auth.CheckPasswordHash(auth.CheckPasswordHashParams{
 		Hash:     user.UserProps.Password,
 		Password: params.Password,
 	})
 
-	if !doesPasswordMatch {
+	if err != nil {
 		return "", errata.CreateError("handleLoginMacro auth.CheckPasswordHash doesn't match", err)
 	}
 
