@@ -34,12 +34,12 @@ func addPkgActions(server *echo.Echo, authorizedGroup *echo.Group) {
 func main() {
 	dbConn, err := db.GetDbConnection()
 	if err != nil {
-		panic(errata.CreateError("main db.GetDbConnection", err))
+		panic(errata.CreateError("main GetDbConnection", err))
 	}
 
 	err = makeDbMigrations(dbConn)
 	if err != nil {
-		panic(errata.CreateError("main dbConn.AutoMigrate", err))
+		panic(errata.CreateError("main AutoMigrate", err))
 	}
 
 	envFlag := flag.Int("dev", 0, START_DEV_MESSAGE+HOST_AND_PORT)
