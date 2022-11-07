@@ -9,9 +9,8 @@ import (
 
 func handleSignUp(context echo.Context) error {
 	var user User
-	var userProps UserProps
 
-	err := context.Bind(&userProps)
+	err := context.Bind(&user.UserProps)
 	if err != nil {
 		return response.HandlerError(response.HandlerErrorParams{
 			Context: context,
@@ -21,7 +20,7 @@ func handleSignUp(context echo.Context) error {
 		})
 	}
 
-	err = handleSignUpMacro(&user, &userProps)
+	err = handleSignUpMacro(&user)
 	if err != nil {
 		return response.HandlerError(response.HandlerErrorParams{
 			Context: context,

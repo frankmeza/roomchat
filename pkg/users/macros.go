@@ -7,20 +7,18 @@ import (
 	"github.com/twinj/uuid"
 )
 
-func handleSignUpMacro(user *User, userProps *UserProps) error {
+func handleSignUpMacro(user *User) error {
 	uuidString := uuid.NewV4().String()
 
-	passwordHash, err := auth.GeneratePasswordString(userProps.Password)
+	passwordHash, err := auth.GeneratePasswordString(user.UserProps.Password)
 	if err != nil {
 		return errata.CreateError("handleSignUpMacro GeneratePasswordString", err)
 	}
 
-	err = UseUsersAPI().CreateUser(
-		user,
-		userProps,
-		string(passwordHash),
-		uuidString,
-	)
+	err = UseUsersAPI().CreateUser(user, CreateUserParams{
+		Hash: string(passwordHash),
+		Uuid: uuidString,
+	})
 
 	if err != nil {
 		return errata.CreateError("handleSignUpMacro CreateUser", err)

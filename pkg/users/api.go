@@ -13,18 +13,18 @@ func UseUsersAPI() UsersAPI {
 	return UsersAPI{apiType: "users"}
 }
 
-func (api UsersAPI) CreateUser(
-	user *User,
-	userPropsPayload *UserProps,
-	passwordHash string,
-	uuid string,
-) error {
-	user.Uuid = uuid
+type CreateUserParams struct {
+	Hash string
+	Uuid string
+}
 
-	userPropsPayload.Uuid = uuid
-	userPropsPayload.Password = string(passwordHash)
+func (api UsersAPI) CreateUser(user *User, params CreateUserParams) error {
+	user.Uuid = params.Uuid
 
-	err := jsonMap.Decode(userPropsPayload, &user.UserProps)
+	user.UserProps.Uuid = params.Uuid
+	user.UserProps.Password = string(params.Hash)
+
+	err := jsonMap.Decode(user.UserProps, &user.UserProps)
 	if err != nil {
 		return errata.CreateError("CreateUser jsonMap.Decode", err)
 	}
