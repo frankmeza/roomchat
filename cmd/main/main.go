@@ -14,6 +14,7 @@ import (
 )
 
 const HOST_AND_PORT string = "127.0.0.1:9990"
+const START_DEV_MESSAGE string = "append -dev 1 to start locally "
 
 func makeDbMigrations(dbConn *gorm.DB) error {
 	return dbConn.AutoMigrate(
@@ -41,8 +42,7 @@ func main() {
 		panic(errata.CreateError("main dbConn.AutoMigrate", err))
 	}
 
-	envMessage := "append -dev 1 to start locally " + HOST_AND_PORT
-	envFlag := flag.Int("dev", 0, envMessage)
+	envFlag := flag.Int("dev", 0, START_DEV_MESSAGE+HOST_AND_PORT)
 
 	flag.Parse()
 	isDev := *envFlag == 1

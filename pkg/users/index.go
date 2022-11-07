@@ -4,7 +4,7 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
-func AddUserActions(echoServer *echo.Echo) {
+func AddAuthenticationActions(echoServer *echo.Echo) {
 	echoServer.POST("/sign_up", handleSignUp)
 	echoServer.POST("/log_in", handleLogin)
 
