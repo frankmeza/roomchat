@@ -54,7 +54,7 @@ func handleLoginMacro(user User, params handleLoginParams) (string, error) {
 
 	if err != nil {
 		return "", errata.CreateError(err, errata.ErrMessage{
-			Text: "handleLoginMacro auth.CheckPasswordHash doesn't match",
+			Text: "handleLoginMacro CheckPasswordHash doesn't match",
 		})
 	}
 
@@ -65,16 +65,25 @@ func handleLoginMacro(user User, params handleLoginParams) (string, error) {
 
 	if err != nil {
 		return "", errata.CreateError(err, errata.ErrMessage{
-			Text: "handleLoginMacro auth.GeneratePasswordString",
+			Text: "handleLoginMacro GeneratePasswordString",
 		})
 	}
 
 	var userSession UserSession
-	// *user is necessary because user is already a reference itself
-	UseSessionsAPI().CreateUserSession(user, &userSession)
+	isOk := UseSessionsAPI().CreateUserSession(user, &userSession)
 
-	// now save user session,
-	// return with tokenString?
+	if !isOk {
+		return "", errata.CreateError(err, errata.ErrMessage{
+			Text: "handleLoginMacro GeneratePasswordString",
+		})
+	}
+
+	err = UseSessionsAPI().SaveUserSession(userSession)
+	if err != nil {
+		return "", errata.CreateError(err, errata.ErrMessage{
+			Text: "handleLoginMacro SaveUserSession",
+		})
+	}
 
 	return tokenString, nil
 }
