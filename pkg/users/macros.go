@@ -37,14 +37,23 @@ func handleSignUpMacro(user *User) error {
 	return nil
 }
 
-func handleLoginMacro(user User, params handleLoginParams) (string, error) {
+type handleLoginMacroMetadata struct {
+	session UserSession
+	token   string
+}
+
+func handleLoginMacro(
+	user User,
+	params handleLoginParams,
+) (handleLoginMacroMetadata, error) {
 	getUserParams := createGetUserParams(params)
 
 	err := UseUsersAPI().GetUserByParam(&user, getUserParams)
 	if err != nil {
-		return "", errata.CreateError(err, errata.ErrMessage{
-			Text: "handleLoginMacro GetUserByParam",
-		})
+		return handleLoginMacroMetadata{},
+			errata.CreateError(err, errata.ErrMessage{
+				Text: "handleLoginMacro GetUserByParam",
+			})
 	}
 
 	err = auth.CheckPasswordHash(auth.CheckPasswordHashParams{
@@ -53,37 +62,45 @@ func handleLoginMacro(user User, params handleLoginParams) (string, error) {
 	})
 
 	if err != nil {
-		return "", errata.CreateError(err, errata.ErrMessage{
-			Text: "handleLoginMacro CheckPasswordHash doesn't match",
-		})
+		return handleLoginMacroMetadata{},
+			errata.CreateError(err, errata.ErrMessage{
+				Text: "handleLoginMacro CheckPasswordHash doesn't match",
+			})
 	}
 
-	tokenString, err := auth.GenerateTokenString(auth.GenerateTokenStringParams{
-		Password: params.Password,
-		Username: params.Username,
-	})
+	tokenString, err := auth.GenerateTokenString(
+		auth.GenerateTokenStringParams{
+			Password: params.Password,
+			Username: params.Username,
+		})
 
 	if err != nil {
-		return "", errata.CreateError(err, errata.ErrMessage{
-			Text: "handleLoginMacro GeneratePasswordString",
-		})
+		return handleLoginMacroMetadata{},
+			errata.CreateError(err, errata.ErrMessage{
+				Text: "handleLoginMacro GeneratePasswordString",
+			})
 	}
 
 	var userSession UserSession
-	isOk := UseSessionsAPI().CreateUserSession(user, &userSession)
 
+	isOk := UseSessionsAPI().CreateUserSession(user, &userSession)
 	if !isOk {
-		return "", errata.CreateError(err, errata.ErrMessage{
-			Text: "handleLoginMacro GeneratePasswordString",
-		})
+		return handleLoginMacroMetadata{},
+			errata.CreateError(err, errata.ErrMessage{
+				Text: "handleLoginMacro GeneratePasswordString",
+			})
 	}
 
 	err = UseSessionsAPI().SaveUserSession(userSession)
 	if err != nil {
-		return "", errata.CreateError(err, errata.ErrMessage{
-			Text: "handleLoginMacro SaveUserSession",
-		})
+		return handleLoginMacroMetadata{},
+			errata.CreateError(err, errata.ErrMessage{
+				Text: "handleLoginMacro SaveUserSession",
+			})
 	}
 
-	return tokenString, nil
+	return handleLoginMacroMetadata{
+		session: userSession,
+		token:   tokenString,
+	}, nil
 }

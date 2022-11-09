@@ -5,7 +5,7 @@ import (
 	"github.com/frankmeza/roomchat/pkg/errata"
 )
 
-func saveUserSessionDb(session UserSession) error {
+func saveUserSessionDb(session *UserSession) error {
 	dbConn, err := db.GetDbConnection()
 	if err != nil {
 		return errata.CreateError(err, errata.ErrMessage{

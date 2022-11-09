@@ -28,5 +28,5 @@ func (api SessionsAPI) CreateUserSession(
 }
 
 func (api SessionsAPI) SaveUserSession(session UserSession) error {
-	return saveUserSessionDb(session)
+	return saveUserSessionDb(&session)
 }

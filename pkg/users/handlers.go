@@ -50,7 +50,7 @@ func handleLogin(context echo.Context) error {
 		})
 	}
 
-	token, err := handleLoginMacro(user, params)
+	loginMetadata, err := handleLoginMacro(user, params)
 	if err != nil {
 		return response.HandlerError(context, err, response.HandlerErrorParams{
 			ErrMsg: "handleLogin handleLoginMacro",
@@ -60,8 +60,9 @@ func handleLogin(context echo.Context) error {
 
 	return response.HandlerSuccess(context, response.HandlerSuccessParams{
 		Payload: map[string]interface{}{
-			"token": token,
-			"user":  user,
+			"session": loginMetadata.session,
+			"token":   loginMetadata.token,
+			"user":    user,
 		},
 		Status: http.StatusOK,
 	})
