@@ -15,7 +15,7 @@ func saveUserSessionDb(session UserSession) error {
 
 	result := dbConn.Debug().Create(session)
 	if result.Error != nil {
-		return errata.CreateError(err, errata.ErrMessage{
+		return errata.CreateError(result.Error, errata.ErrMessage{
 			Text: "saveUserSessionDb Create",
 		})
 	}

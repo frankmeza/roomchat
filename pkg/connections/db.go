@@ -46,7 +46,7 @@ func saveConnectionDb(connection *Connection) error {
 
 	result := dbConn.Debug().Create(connection)
 	if result.Error != nil {
-		return errata.CreateError(err, errata.ErrMessage{
+		return errata.CreateError(result.Error, errata.ErrMessage{
 			Text: "saveConnectionDb Create",
 		})
 	}
@@ -64,7 +64,7 @@ func saveMessageDb(Message *Message) error {
 
 	result := dbConn.Debug().Create(Message)
 	if result.Error != nil {
-		return errata.CreateError(err, errata.ErrMessage{
+		return errata.CreateError(result.Error, errata.ErrMessage{
 			Text: "saveMessageDb Create",
 		})
 	}
@@ -111,7 +111,7 @@ func getConnectionDbByParam(
 
 	result := dbConn.Debug().Find(&connection, query)
 	if result.Error != nil {
-		return errata.CreateError(err, errata.ErrMessage{
+		return errata.CreateError(result.Error, errata.ErrMessage{
 			Text: "getConnectionDbByParam Find",
 		})
 	}

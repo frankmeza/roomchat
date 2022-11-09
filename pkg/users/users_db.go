@@ -17,7 +17,7 @@ func saveUserDb(user *User) error {
 
 	result := dbConn.Debug().Create(user)
 	if result.Error != nil {
-		return errata.CreateError(err, errata.ErrMessage{
+		return errata.CreateError(result.Error, errata.ErrMessage{
 			Text: "saveUserDb Create",
 		})
 	}
@@ -74,7 +74,7 @@ func getUserDbByParam(user *User, params GetUserParams) error {
 
 	result := dbConn.Debug().Find(&user, query)
 	if result.Error != nil {
-		return errata.CreateError(err, errata.ErrMessage{
+		return errata.CreateError(result.Error, errata.ErrMessage{
 			Text: "getUserDbByParam GetDbConnection",
 		})
 	}
