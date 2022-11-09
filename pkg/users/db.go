@@ -10,12 +10,12 @@ import (
 func saveUserDb(user *User) error {
 	dbConn, err := db.GetDbConnection()
 	if err != nil {
-		return errata.CreateError("saveUserDb db.GetDbConnection", err)
+		return errata.CreateError("saveUserDb GetDbConnection", err)
 	}
 
 	result := dbConn.Debug().Create(user)
 	if result.Error != nil {
-		return errata.CreateError("saveUserDb dbConn.Debug().Create", err)
+		return errata.CreateError("saveUserDb Create", err)
 	}
 
 	return nil
@@ -52,7 +52,7 @@ func getParamToUse(params GetUserParams) string {
 func getUserDbByParam(user *User, params GetUserParams) error {
 	dbConn, err := db.GetDbConnection()
 	if err != nil {
-		return errata.CreateError("getUserDbByParam db.GetDbConnection", err)
+		return errata.CreateError("getUserDbByParam GetDbConnection", err)
 	}
 
 	paramToUse := getParamToUse(params)
@@ -66,7 +66,7 @@ func getUserDbByParam(user *User, params GetUserParams) error {
 
 	result := dbConn.Debug().Find(&user, query)
 	if result.Error != nil {
-		return errata.CreateError("getUserDbByParam db.GetDbConnection", err)
+		return errata.CreateError("getUserDbByParam GetDbConnection", err)
 	}
 
 	return nil

@@ -4,7 +4,7 @@ import (
 	"os"
 	"time"
 
-	cc "github.com/frankmeza/roomchat/pkg/constants"
+	"github.com/frankmeza/roomchat/pkg/constants"
 	"github.com/frankmeza/roomchat/pkg/errata"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
@@ -24,7 +24,7 @@ type (
 )
 
 func GetDbConnection() (*gorm.DB, error) {
-	postgresDb := postgres.Open(os.Getenv(cc.DB_URL))
+	postgresDb := postgres.Open(os.Getenv(constants.DB_URL))
 	dbConn, err := gorm.Open(postgresDb, &gorm.Config{})
 
 	if err != nil {
