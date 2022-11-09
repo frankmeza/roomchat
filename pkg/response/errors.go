@@ -7,13 +7,15 @@ import (
 )
 
 type HandlerErrorParams struct {
-	Context echo.Context
-	ErrMsg  string
-	Err     error
-	Status  int
+	ErrMsg string
+	Status int
 }
 
-func HandlerError(context echo.Context, err error, params HandlerErrorParams) error {
+func HandlerError(
+	context echo.Context,
+	err error,
+	params HandlerErrorParams,
+) error {
 	errorMessage := fmt.Sprintf(params.ErrMsg, "caused error:", err)
 	return context.String(params.Status, errorMessage)
 }

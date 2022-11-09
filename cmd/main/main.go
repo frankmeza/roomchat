@@ -22,6 +22,7 @@ func makeDbMigrations(dbConn *gorm.DB) error {
 	return dbConn.AutoMigrate(
 		&connections.ConnectionProps{},
 		&connections.Message{},
+		&users.UserSession{},
 		&users.UserSessionProps{},
 		&users.User{},
 	)
