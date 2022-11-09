@@ -12,26 +12,21 @@ func handleSignUp(context echo.Context) error {
 
 	err := context.Bind(&user.UserProps)
 	if err != nil {
-		return response.HandlerError(response.HandlerErrorParams{
-			Context: context,
-			Err:     err,
-			ErrMsg:  "handleSignUp context.Bind",
-			Status:  http.StatusBadRequest,
+		return response.HandlerError(context, err, response.HandlerErrorParams{
+			ErrMsg: "handleSignUp context.Bind",
+			Status: http.StatusBadRequest,
 		})
 	}
 
 	err = handleSignUpMacro(&user)
 	if err != nil {
-		return response.HandlerError(response.HandlerErrorParams{
-			Context: context,
-			Err:     err,
-			ErrMsg:  "handleSignUp handleSignUpMacro",
-			Status:  http.StatusBadRequest,
+		return response.HandlerError(context, err, response.HandlerErrorParams{
+			ErrMsg: "handleSignUp handleSignUpMacro",
+			Status: http.StatusBadRequest,
 		})
 	}
 
-	return response.HandlerSuccess(response.HandlerSuccessParams{
-		Context: context,
+	return response.HandlerSuccess(context, response.HandlerSuccessParams{
 		Payload: &user,
 		Status:  http.StatusOK,
 	})
@@ -49,26 +44,21 @@ func handleLogin(context echo.Context) error {
 
 	err := context.Bind(&params)
 	if err != nil {
-		return response.HandlerError(response.HandlerErrorParams{
-			Context: context,
-			Err:     err,
-			ErrMsg:  "handleLogin context.Bind",
-			Status:  http.StatusBadRequest,
+		return response.HandlerError(context, err, response.HandlerErrorParams{
+			ErrMsg: "handleLogin context.Bind",
+			Status: http.StatusBadRequest,
 		})
 	}
 
 	token, err := handleLoginMacro(user, params)
 	if err != nil {
-		return response.HandlerError(response.HandlerErrorParams{
-			Context: context,
-			Err:     err,
-			ErrMsg:  "handleLogin handleLoginMacro",
-			Status:  http.StatusBadRequest,
+		return response.HandlerError(context, err, response.HandlerErrorParams{
+			ErrMsg: "handleLogin handleLoginMacro",
+			Status: http.StatusBadRequest,
 		})
 	}
 
-	return response.HandlerSuccess(response.HandlerSuccessParams{
-		Context: context,
+	return response.HandlerSuccess(context, response.HandlerSuccessParams{
 		Payload: map[string]interface{}{
 			"token": token,
 			"user":  user,
@@ -78,8 +68,7 @@ func handleLogin(context echo.Context) error {
 }
 
 func handleUpdateUser(context echo.Context) error {
-	return response.HandlerSuccess(response.HandlerSuccessParams{
-		Context: context,
+	return response.HandlerSuccess(context, response.HandlerSuccessParams{
 		Payload: map[string]string{"user": "so lit"},
 		Status:  http.StatusOK,
 	})

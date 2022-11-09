@@ -17,26 +17,21 @@ func handleMakeConnection(context echo.Context) error {
 
 	err := context.Bind(&params)
 	if err != nil {
-		return response.HandlerError(response.HandlerErrorParams{
-			Context: context,
-			Err:     err,
-			ErrMsg:  "handleMakeConnection context.Bind",
-			Status:  http.StatusBadRequest,
+		return response.HandlerError(context, err, response.HandlerErrorParams{
+			ErrMsg: "handleMakeConnection context.Bind",
+			Status: http.StatusBadRequest,
 		})
 	}
 
 	connection, err := handleMakeConnectionMacro(params)
 	if err != nil {
-		return response.HandlerError(response.HandlerErrorParams{
-			Context: context,
-			Err:     err,
-			ErrMsg:  "handleMakeConnection handleMakeConnectionMacro",
-			Status:  http.StatusBadRequest,
+		return response.HandlerError(context, err, response.HandlerErrorParams{
+			ErrMsg: "handleMakeConnection handleMakeConnectionMacro",
+			Status: http.StatusBadRequest,
 		})
 	}
 
-	return response.HandlerSuccess(response.HandlerSuccessParams{
-		Context: context,
+	return response.HandlerSuccess(context, response.HandlerSuccessParams{
 		Payload: connection,
 		Status:  http.StatusOK,
 	})
@@ -53,21 +48,17 @@ func handleAddMessage(context echo.Context) error {
 
 	err := context.Bind(&params)
 	if err != nil {
-		return response.HandlerError(response.HandlerErrorParams{
-			Context: context,
-			Err:     err,
-			ErrMsg:  "handleAddMessage context.Bind",
-			Status:  http.StatusBadRequest,
+		return response.HandlerError(context, err, response.HandlerErrorParams{
+			ErrMsg: "handleAddMessage context.Bind",
+			Status: http.StatusBadRequest,
 		})
 	}
 
 	err = handleAddMessageMacro(params)
 	if err != nil {
-		return response.HandlerError(response.HandlerErrorParams{
-			Context: context,
-			Err:     err,
-			ErrMsg:  "handleAddMessage handleAddMessageMacro",
-			Status:  http.StatusBadRequest,
+		return response.HandlerError(context, err, response.HandlerErrorParams{
+			ErrMsg: "handleAddMessage handleAddMessageMacro",
+			Status: http.StatusBadRequest,
 		})
 	}
 

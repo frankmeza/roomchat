@@ -13,7 +13,7 @@ type HandlerErrorParams struct {
 	Status  int
 }
 
-func HandlerError(params HandlerErrorParams) error {
-	errorMessage := fmt.Sprintf(params.ErrMsg, "caused error:", params.Err)
-	return params.Context.String(params.Status, errorMessage)
+func HandlerError(context echo.Context, err error, params HandlerErrorParams) error {
+	errorMessage := fmt.Sprintf(params.ErrMsg, "caused error:", err)
+	return context.String(params.Status, errorMessage)
 }
