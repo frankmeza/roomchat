@@ -72,10 +72,10 @@ func getUserDbByParam(user *User, params GetUserParams) error {
 		JSONQuery(constants.USER_PROPS).
 		Equals(paramToUse, params.ParamName)
 
-	result := dbConn.Debug().Find(&user, query)
+	result := dbConn.Debug().Find(user, query)
 	if result.Error != nil {
 		return errata.CreateError(result.Error, errata.ErrMessage{
-			Text: "getUserDbByParam GetDbConnection",
+			Text: "getUserDbByParam Find",
 		})
 	}
 
