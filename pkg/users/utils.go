@@ -20,3 +20,23 @@ func createGetUserParams(params handleLoginParams) GetUserParams {
 
 	return getUserParams
 }
+
+func getParamToUse(params GetUserParams) string {
+	if params.ParamName == constants.EMAIL {
+		return params.Email
+	}
+
+	if params.ParamName == constants.ID {
+		return params.ID
+	}
+
+	if params.ParamName == constants.USERNAME {
+		return params.Username
+	}
+
+	if params.ParamName == constants.UUID {
+		return params.Uuid
+	}
+
+	return ""
+}

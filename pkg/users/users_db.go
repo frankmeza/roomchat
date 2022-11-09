@@ -33,26 +33,6 @@ type GetUserParams struct {
 	Uuid      string
 }
 
-func getParamToUse(params GetUserParams) string {
-	if params.ParamName == constants.EMAIL {
-		return params.Email
-	}
-
-	if params.ParamName == constants.ID {
-		return params.ID
-	}
-
-	if params.ParamName == constants.USERNAME {
-		return params.Username
-	}
-
-	if params.ParamName == constants.UUID {
-		return params.Uuid
-	}
-
-	return ""
-}
-
 func getUserDbByParam(user *User, params GetUserParams) error {
 	dbConn, err := db.GetDbConnection()
 	if err != nil {

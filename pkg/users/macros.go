@@ -9,7 +9,10 @@ import (
 func handleSignUpMacro(user *User) error {
 	uuidString := appUtils.CreateUuid()
 
-	passwordHash, err := auth.GeneratePasswordString(user.UserProps.Password)
+	passwordHash, err := auth.GeneratePasswordString(
+		user.UserProps.Password,
+	)
+
 	if err != nil {
 		return errata.CreateError(err, errata.ErrMessage{
 			Text: "handleSignUpMacro GeneratePasswordString",
