@@ -2,11 +2,14 @@ package main
 
 import (
 	"flag"
+	"os"
 
 	"github.com/frankmeza/roomchat/pkg/auth"
 	"github.com/frankmeza/roomchat/pkg/connections"
+	"github.com/frankmeza/roomchat/pkg/constants"
 	"github.com/frankmeza/roomchat/pkg/db"
 	"github.com/frankmeza/roomchat/pkg/errata"
+	"github.com/frankmeza/roomchat/pkg/sessions"
 	"github.com/frankmeza/roomchat/pkg/users"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
@@ -20,6 +23,7 @@ func makeDbMigrations(dbConn *gorm.DB) error {
 	return dbConn.AutoMigrate(
 		&connections.ConnectionProps{},
 		&connections.Message{},
+		&sessions.UserSessionProps{},
 		&users.User{},
 	)
 }
@@ -58,7 +62,7 @@ func main() {
 
 	config := middleware.JWTConfig{
 		Claims:     &auth.JwtClaims{},
-		SigningKey: []byte("secret"),
+		SigningKey: []byte(os.Getenv(constants.SIGNING_KEY)),
 	}
 
 	authorizedGroup.Use(middleware.JWTWithConfig(config))
