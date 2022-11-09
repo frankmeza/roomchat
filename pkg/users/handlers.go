@@ -57,7 +57,7 @@ func handleLogin(context echo.Context) error {
 		})
 	}
 
-	token, err := handleLoginMacro(&user, params)
+	token, err := handleLoginMacro(user, params)
 	if err != nil {
 		return response.HandlerError(response.HandlerErrorParams{
 			Context: context,
