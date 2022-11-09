@@ -1,13 +1,13 @@
 package users
 
 import (
+	appUtils "github.com/frankmeza/roomchat/pkg/app_utils"
 	"github.com/frankmeza/roomchat/pkg/errata"
 	"github.com/frankmeza/roomchat/pkg/users/auth"
-	"github.com/twinj/uuid"
 )
 
 func handleSignUpMacro(user *User) error {
-	uuidString := uuid.NewV4().String()
+	uuidString := appUtils.CreateUuid()
 
 	passwordHash, err := auth.GeneratePasswordString(user.UserProps.Password)
 	if err != nil {
@@ -37,10 +37,10 @@ func handleSignUpMacro(user *User) error {
 	return nil
 }
 
-func handleLoginMacro(user *User, params handleLoginParams) (string, error) {
+func handleLoginMacro(user User, params handleLoginParams) (string, error) {
 	getUserParams := createGetUserParams(params)
 
-	err := UseUsersAPI().GetUserByParam(user, getUserParams)
+	err := UseUsersAPI().GetUserByParam(&user, getUserParams)
 	if err != nil {
 		return "", errata.CreateError(err, errata.ErrMessage{
 			Text: "handleLoginMacro GetUserByParam",
@@ -69,7 +69,10 @@ func handleLoginMacro(user *User, params handleLoginParams) (string, error) {
 		})
 	}
 
-	userSession := UseSessionsAPI().CreateUserSession(*user)
+	var userSession UserSession
+	// *user is necessary because user is already a reference itself
+	UseSessionsAPI().CreateUserSession(user, &userSession)
+
 	// now save user session,
 	// return with tokenString?
 

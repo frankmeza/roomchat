@@ -1,6 +1,8 @@
 package connections
 
-import "github.com/twinj/uuid"
+import (
+	appUtils "github.com/frankmeza/roomchat/pkg/app_utils"
+)
 
 type ConnectionsAPI struct {
 	apiType string
@@ -21,7 +23,7 @@ func (api ConnectionsAPI) UpdateConnection(connection *Connection) error {
 func (api ConnectionsAPI) CreateConnection(
 	params handleMakeConnectionParams,
 ) Connection {
-	uuidString := uuid.NewV4().String()
+	uuidString := appUtils.CreateUuid()
 
 	return Connection{
 		ConnectionProps: ConnectionProps{

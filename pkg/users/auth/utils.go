@@ -3,10 +3,10 @@ package auth
 import (
 	"os"
 
+	appUtils "github.com/frankmeza/roomchat/pkg/app_utils"
 	"github.com/frankmeza/roomchat/pkg/constants"
 	"github.com/frankmeza/roomchat/pkg/errata"
 	"github.com/golang-jwt/jwt"
-	"github.com/twinj/uuid"
 	"golang.org/x/crypto/bcrypt"
 )
 
@@ -52,7 +52,7 @@ func GenerateTokenString(params GenerateTokenStringParams) (string, error) {
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, JwtClaims{
 		IsAdmin: true,
 		Name:    params.Username + params.Password,
-		UUID:    uuid.NewV4().String(),
+		UUID:    appUtils.CreateUuid(),
 	})
 
 	tokenAsString, err := token.SignedString(
