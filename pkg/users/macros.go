@@ -1,9 +1,8 @@
 package users
 
 import (
-	"github.com/frankmeza/roomchat/pkg/auth"
-	"github.com/frankmeza/roomchat/pkg/constants"
 	"github.com/frankmeza/roomchat/pkg/errata"
+	"github.com/frankmeza/roomchat/pkg/users/auth"
 	"github.com/twinj/uuid"
 )
 
@@ -12,7 +11,9 @@ func handleSignUpMacro(user *User) error {
 
 	passwordHash, err := auth.GeneratePasswordString(user.UserProps.Password)
 	if err != nil {
-		return errata.CreateError("handleSignUpMacro GeneratePasswordString", err)
+		return errata.CreateError(err, errata.ErrMessage{
+			Text: "handleSignUpMacro GeneratePasswordString",
+		})
 	}
 
 	err = UseUsersAPI().CreateUser(user, CreateUserParams{
@@ -21,34 +22,29 @@ func handleSignUpMacro(user *User) error {
 	})
 
 	if err != nil {
-		return errata.CreateError("handleSignUpMacro CreateUser", err)
+		return errata.CreateError(err, errata.ErrMessage{
+			Text: "handleSignUpMacro CreateUser",
+		})
 	}
 
 	err = UseUsersAPI().SaveUser(user)
 	if err != nil {
-		return errata.CreateError("handleSignUpMacro SaveUser", err)
+		return errata.CreateError(err, errata.ErrMessage{
+			Text: "handleSignUpMacro SaveUser",
+		})
 	}
 
 	return nil
 }
 
 func handleLoginMacro(user *User, params handleLoginParams) (string, error) {
-	getUserParams := GetUserParams{
-		Email:    params.Email,
-		Username: params.Username,
-	}
-
-	if getUserParams.Email != "" {
-		getUserParams.ParamName = constants.EMAIL
-	}
-
-	if getUserParams.Username != "" {
-		getUserParams.ParamName = constants.USERNAME
-	}
+	getUserParams := createGetUserParams(params)
 
 	err := UseUsersAPI().GetUserByParam(user, getUserParams)
 	if err != nil {
-		return "", errata.CreateError("handleLoginMacro GetUserByParam", err)
+		return "", errata.CreateError(err, errata.ErrMessage{
+			Text: "handleLoginMacro GetUserByParam",
+		})
 	}
 
 	err = auth.CheckPasswordHash(auth.CheckPasswordHashParams{
@@ -57,7 +53,9 @@ func handleLoginMacro(user *User, params handleLoginParams) (string, error) {
 	})
 
 	if err != nil {
-		return "", errata.CreateError("handleLoginMacro auth.CheckPasswordHash doesn't match", err)
+		return "", errata.CreateError(err, errata.ErrMessage{
+			Text: "handleLoginMacro auth.CheckPasswordHash doesn't match",
+		})
 	}
 
 	tokenString, err := auth.GenerateTokenString(auth.GenerateTokenStringParams{
@@ -66,8 +64,14 @@ func handleLoginMacro(user *User, params handleLoginParams) (string, error) {
 	})
 
 	if err != nil {
-		return "", errata.CreateError("handleLoginMacro auth.GeneratePasswordString", err)
+		return "", errata.CreateError(err, errata.ErrMessage{
+			Text: "handleLoginMacro auth.GeneratePasswordString",
+		})
 	}
+
+	userSession := UseSessionsAPI().CreateUserSession(*user)
+	// now save user session,
+	// return with tokenString?
 
 	return tokenString, nil
 }

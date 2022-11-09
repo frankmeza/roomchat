@@ -10,12 +10,16 @@ import (
 func saveUserDb(user *User) error {
 	dbConn, err := db.GetDbConnection()
 	if err != nil {
-		return errata.CreateError("saveUserDb GetDbConnection", err)
+		return errata.CreateError(err, errata.ErrMessage{
+			Text: "saveUserDb GetDbConnection",
+		})
 	}
 
 	result := dbConn.Debug().Create(user)
 	if result.Error != nil {
-		return errata.CreateError("saveUserDb Create", err)
+		return errata.CreateError(err, errata.ErrMessage{
+			Text: "saveUserDb Create",
+		})
 	}
 
 	return nil
@@ -52,12 +56,16 @@ func getParamToUse(params GetUserParams) string {
 func getUserDbByParam(user *User, params GetUserParams) error {
 	dbConn, err := db.GetDbConnection()
 	if err != nil {
-		return errata.CreateError("getUserDbByParam GetDbConnection", err)
+		return errata.CreateError(err, errata.ErrMessage{
+			Text: "getUserDbByParam GetDbConnection",
+		})
 	}
 
 	paramToUse := getParamToUse(params)
 	if paramToUse == "" {
-		return errata.CreateError("getUserDbByParam getParamToUse", err)
+		return errata.CreateError(err, errata.ErrMessage{
+			Text: "getUserDbByParam getParamToUse",
+		})
 	}
 
 	query := datatypes.
@@ -66,7 +74,9 @@ func getUserDbByParam(user *User, params GetUserParams) error {
 
 	result := dbConn.Debug().Find(&user, query)
 	if result.Error != nil {
-		return errata.CreateError("getUserDbByParam GetDbConnection", err)
+		return errata.CreateError(err, errata.ErrMessage{
+			Text: "getUserDbByParam GetDbConnection",
+		})
 	}
 
 	return nil

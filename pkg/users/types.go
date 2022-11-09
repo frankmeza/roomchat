@@ -33,7 +33,9 @@ type (
 func (userProps *UserProps) Scan(incomingValue interface{}) error {
 	valueAsByteSlice, ok := incomingValue.([]byte)
 	if !ok {
-		return errata.CreateError("UserProps Scan", errors.New(""))
+		return errata.CreateError(errors.New(""), errata.ErrMessage{
+			Text: "UserProps Scan",
+		})
 	}
 
 	return json.Unmarshal([]byte(valueAsByteSlice), userProps)
@@ -42,7 +44,9 @@ func (userProps *UserProps) Scan(incomingValue interface{}) error {
 func (userProps UserProps) Value() (driver.Value, error) {
 	value, err := json.Marshal(&userProps)
 	if err != nil {
-		return nil, errata.CreateError("UserProps Value", err)
+		return nil, errata.CreateError(err, errata.ErrMessage{
+			Text: "UserProps Value",
+		})
 	}
 
 	return value, nil

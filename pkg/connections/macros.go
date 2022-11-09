@@ -29,13 +29,17 @@ func handleMakeConnectionMacro(
 
 	if len(verifiedUsers) != 2 {
 		return Connection{},
-			errata.CreateError("handleMakeConnectionMacro", errors.New(""))
+			errata.CreateError(errors.New(""), errata.ErrMessage{
+				Text: "handleMakeConnectionMacro",
+			})
 	}
 
 	err := useConnectionsAPI().SaveMessage(&params.Message)
 	if err != nil {
 		return Connection{},
-			errata.CreateError("handleMakeConnectionMacro SaveMessage", err)
+			errata.CreateError(err, errata.ErrMessage{
+				Text: "handleMakeConnectionMacro SaveMessage",
+			})
 	}
 
 	connection := useConnectionsAPI().CreateConnection(params)
@@ -43,7 +47,9 @@ func handleMakeConnectionMacro(
 	err = useConnectionsAPI().SaveConnection(&connection)
 	if err != nil {
 		return Connection{},
-			errata.CreateError("handleMakeConnectionMacro SaveConnection", err)
+			errata.CreateError(err, errata.ErrMessage{
+				Text: "handleMakeConnectionMacro SaveConnection",
+			})
 	}
 
 	return connection, nil
@@ -60,7 +66,9 @@ func handleAddMessageMacro(params handleAddMessageParams) error {
 	)
 
 	if err != nil {
-		return errata.CreateError("handleAddMessageMacro GetConnectionByParam", err)
+		return errata.CreateError(err, errata.ErrMessage{
+			Text: "handleAddMessageMacro GetConnectionByParam",
+		})
 	}
 
 	var toUser string
@@ -75,14 +83,18 @@ func handleAddMessageMacro(params handleAddMessageParams) error {
 
 	err = useConnectionsAPI().SaveMessage(&newMessage)
 	if err != nil {
-		return errata.CreateError("handleAddMessageMacro SaveMessage", err)
+		return errata.CreateError(err, errata.ErrMessage{
+			Text: "handleAddMessageMacro SaveMessage",
+		})
 	}
 
 	connection.Messages = append(connection.Messages, newMessage)
 
 	err = useConnectionsAPI().UpdateConnection(&connection)
 	if err != nil {
-		return errata.CreateError("handleAddMessageMacro UpdateConnection", err)
+		return errata.CreateError(err, errata.ErrMessage{
+			Text: "handleAddMessageMacro UpdateConnection",
+		})
 	}
 
 	return nil

@@ -4,11 +4,10 @@ import (
 	"fmt"
 )
 
-type ErrataParams struct {
-	ErrMsg string
-	Err    error
+type ErrMessage struct {
+	Text string
 }
 
-func CreateError(errMessage string, err error) error {
-	return fmt.Errorf(errMessage, "caused error:", err)
+func CreateError(err error, errMessage ErrMessage) error {
+	return fmt.Errorf(errMessage.Text, "caused error:", err)
 }

@@ -17,8 +17,9 @@ func GeneratePasswordString(plaintext string) (string, error) {
 	)
 
 	if err != nil {
-		return "",
-			errata.CreateError("GeneratePasswordString bcrypt.GenerateFromPassword", err)
+		return "", errata.CreateError(err, errata.ErrMessage{
+			Text: "GeneratePasswordString bcrypt.GenerateFromPassword",
+		})
 	}
 
 	return string(passwordHash), nil
@@ -59,8 +60,9 @@ func GenerateTokenString(params GenerateTokenStringParams) (string, error) {
 	)
 
 	if err != nil {
-		return "",
-			errata.CreateError("GenerateTokenString token.SignedString", err)
+		return "", errata.CreateError(err, errata.ErrMessage{
+			Text: "GenerateTokenString token.SignedString",
+		})
 	}
 
 	return tokenAsString, nil

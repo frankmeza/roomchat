@@ -37,7 +37,9 @@ type (
 func (connectionProps *ConnectionProps) Scan(incomingValue interface{}) error {
 	valueAsByteSlice, ok := incomingValue.([]byte)
 	if !ok {
-		return errata.CreateError("ConnectionProps Scan", errors.New(""))
+		return errata.CreateError(errors.New(""), errata.ErrMessage{
+			Text: "ConnectionProps Scan",
+		})
 	}
 
 	return json.Unmarshal([]byte(valueAsByteSlice), connectionProps)
@@ -46,7 +48,9 @@ func (connectionProps *ConnectionProps) Scan(incomingValue interface{}) error {
 func (connectionProps ConnectionProps) Value() (driver.Value, error) {
 	value, err := json.Marshal(&connectionProps)
 	if err != nil {
-		return nil, errata.CreateError("ConnectionProps Value", err)
+		return nil, errata.CreateError(err, errata.ErrMessage{
+			Text: "ConnectionProps Value",
+		})
 	}
 
 	return value, nil
@@ -55,7 +59,9 @@ func (connectionProps ConnectionProps) Value() (driver.Value, error) {
 func (message *Message) Scan(incomingValue interface{}) error {
 	valueAsByteSlice, ok := incomingValue.([]byte)
 	if !ok {
-		return errata.CreateError("Message Scan", errors.New(""))
+		return errata.CreateError(errors.New(""), errata.ErrMessage{
+			Text: "Message Scan",
+		})
 	}
 
 	return json.Unmarshal([]byte(valueAsByteSlice), message)
@@ -64,7 +70,9 @@ func (message *Message) Scan(incomingValue interface{}) error {
 func (message Message) Value() (driver.Value, error) {
 	value, err := json.Marshal(&message)
 	if err != nil {
-		return nil, errata.CreateError("Message Value", err)
+		return nil, errata.CreateError(err, errata.ErrMessage{
+			Text: "Message Value",
+		})
 	}
 
 	return value, nil
