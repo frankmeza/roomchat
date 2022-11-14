@@ -20,21 +20,21 @@ const START_DEV_MESSAGE string = "append -dev 1 to start locally "
 
 func makeDbMigrations(dbConn *gorm.DB) error {
 	return dbConn.AutoMigrate(
-		&connections.ConnectionProps{},
+		// connections
+		&connections.Connection{},
 		&connections.Message{},
-		&users.UserSession{},
-		&users.UserSessionProps{},
+
+		// users
 		&users.User{},
+		&users.UserSession{},
 	)
 }
 
 func addPkgActions(server *echo.Echo, authorizedGroup *echo.Group) {
 	users.AddAuthenticationActions(server)
-
 	connections.AddConnectionActions(authorizedGroup)
 }
 
-// basically fossilized at this point
 func main() {
 	dbConn, err := db.GetDbConnection()
 	if err != nil {
