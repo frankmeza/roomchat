@@ -7,6 +7,9 @@ type HandlerSuccessParams struct {
 	Status  int
 }
 
-func HandlerSuccess(context echo.Context, params HandlerSuccessParams) error {
+func HandlerSuccess(
+	context echo.Context,
+	params HandlerSuccessParams,
+) error {
 	return context.JSON(params.Status, params.Payload)
 }
