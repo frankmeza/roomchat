@@ -38,6 +38,12 @@ type (
 		apiType string
 	}
 
+	handleAddMessageParams struct {
+		ConnectionUuid string `json:"connection_id"`
+		FromUser       string `json:"from_user"`
+		Text           string `json:"text"`
+	}
+
 	handleMakeConnectionParams struct {
 		Message  Message `json:"message"`
 		Location string  `json:"location"`

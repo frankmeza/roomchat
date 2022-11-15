@@ -11,8 +11,7 @@ func updateConnectionDb(updatedConnection *Connection) error {
 	var existingConnection Connection
 
 	err := useConnectionsAPI().GetConnectionByParam(
-		&existingConnection,
-		getConnectionParams{
+		&existingConnection, getConnectionParams{
 			ParamName: constants.UUID,
 			Uuid:      existingConnection.Uuid,
 		})

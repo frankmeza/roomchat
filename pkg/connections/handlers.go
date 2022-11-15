@@ -32,12 +32,6 @@ func handleMakeConnection(context echo.Context) error {
 	})
 }
 
-type handleAddMessageParams struct {
-	ConnectionUuid string `json:"connection_id"`
-	FromUser       string `json:"from_user"`
-	Text           string `json:"text"`
-}
-
 func handleAddMessage(context echo.Context) error {
 	var params handleAddMessageParams
 

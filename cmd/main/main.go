@@ -18,6 +18,14 @@ import (
 const HOST_AND_PORT string = "127.0.0.1:9990"
 const START_DEV_MESSAGE string = "append -dev 1 to start locally "
 
+func addPkgActions(server *echo.Echo, authorizedGroup *echo.Group) {
+	users.AddAuthenticationActions(server)
+
+	// below use /auth as prefix
+	users.AddUserFetchActions(authorizedGroup)
+	connections.AddConnectionActions(authorizedGroup)
+}
+
 func makeDbMigrations(dbConn *gorm.DB) error {
 	return dbConn.AutoMigrate(
 		// connections
@@ -28,14 +36,6 @@ func makeDbMigrations(dbConn *gorm.DB) error {
 		&users.User{},
 		&users.UserSession{},
 	)
-}
-
-func addPkgActions(server *echo.Echo, authorizedGroup *echo.Group) {
-	users.AddAuthenticationActions(server)
-
-	// below use /auth as prefix
-	users.AddUserFetchActions(authorizedGroup)
-	connections.AddConnectionActions(authorizedGroup)
 }
 
 func main() {
