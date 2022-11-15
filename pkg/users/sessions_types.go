@@ -22,6 +22,12 @@ type (
 	}
 )
 
+type (
+	SessionsAPI struct {
+		apiType string
+	}
+)
+
 func (userSessionProps *UserSessionProps) Scan(incomingValue interface{}) error {
 	valueAsByteSlice, ok := incomingValue.([]byte)
 	if !ok {

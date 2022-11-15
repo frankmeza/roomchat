@@ -29,6 +29,31 @@ type (
 	}
 )
 
+type (
+	GetUserParams struct {
+		Email     string
+		ID        string
+		ParamName string
+		Username  string
+		Uuid      string
+	}
+
+	handleLoginMacroMetadata struct {
+		session UserSession
+		token   string
+	}
+
+	handleLoginParams struct {
+		Email    string `json:"email"`
+		Password string `json:"password"`
+		Username string `json:"username"`
+	}
+
+	UsersAPI struct {
+		apiType string
+	}
+)
+
 // from https://gorm.io/docs/data_types.html#Implements-Customized-Data-Type
 func (userProps *UserProps) Scan(incomingValue interface{}) error {
 	valueAsByteSlice, ok := incomingValue.([]byte)

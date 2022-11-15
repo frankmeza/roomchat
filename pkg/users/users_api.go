@@ -5,10 +5,6 @@ import (
 	jsonMap "github.com/mitchellh/mapstructure"
 )
 
-type UsersAPI struct {
-	apiType string
-}
-
 func UseUsersAPI() UsersAPI {
 	return UsersAPI{apiType: "users"}
 }

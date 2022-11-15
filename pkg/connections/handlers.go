@@ -7,11 +7,6 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
-type handleMakeConnectionParams struct {
-	Message  Message `json:"message"`
-	Location string  `json:"location"`
-}
-
 func handleMakeConnection(context echo.Context) error {
 	var params handleMakeConnectionParams
 

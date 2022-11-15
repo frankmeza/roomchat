@@ -55,12 +55,6 @@ func handleSignUp(context echo.Context) error {
 	})
 }
 
-type handleLoginParams struct {
-	Email    string `json:"email"`
-	Password string `json:"password"`
-	Username string `json:"username"`
-}
-
 func handleLogin(context echo.Context) error {
 	var params handleLoginParams
 	var user User

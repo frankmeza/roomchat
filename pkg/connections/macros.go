@@ -8,12 +8,16 @@ import (
 	"github.com/frankmeza/roomchat/pkg/users"
 )
 
-func handleMakeConnectionMacro(
-	params handleMakeConnectionParams,
-) (Connection, error) {
+func handleMakeConnectionMacro(params handleMakeConnectionParams) (
+	Connection, error,
+) {
 	var verifiedUsers []users.User
 
-	userUuids := []string{params.Message.FromUser, params.Message.ToUser}
+	userUuids := []string{
+		params.Message.FromUser,
+		params.Message.ToUser,
+	}
+
 	for _, userUuid := range userUuids {
 		var verifiedUser users.User
 

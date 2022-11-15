@@ -1,8 +1,6 @@
 package connections
 
 import (
-	"fmt"
-
 	"github.com/frankmeza/roomchat/pkg/constants"
 	"github.com/frankmeza/roomchat/pkg/db"
 	"github.com/frankmeza/roomchat/pkg/errata"
@@ -106,8 +104,6 @@ func getConnectionDbByParam(
 	query := datatypes.
 		JSONQuery(constants.CONNECTIONS).
 		Equals(paramToUse, params.ParamName)
-
-	fmt.Println("query is", query)
 
 	result := dbConn.Debug().Find(&connection, query)
 	if result.Error != nil {

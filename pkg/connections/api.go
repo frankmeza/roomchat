@@ -4,10 +4,6 @@ import (
 	appUtils "github.com/frankmeza/roomchat/pkg/app_utils"
 )
 
-type ConnectionsAPI struct {
-	apiType string
-}
-
 func useConnectionsAPI() ConnectionsAPI {
 	return ConnectionsAPI{apiType: "connections"}
 }

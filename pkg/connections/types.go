@@ -33,6 +33,17 @@ type (
 	}
 )
 
+type (
+	ConnectionsAPI struct {
+		apiType string
+	}
+
+	handleMakeConnectionParams struct {
+		Message  Message `json:"message"`
+		Location string  `json:"location"`
+	}
+)
+
 // from https://gorm.io/docs/data_types.html#Implements-Customized-Data-Type
 func (connectionProps *ConnectionProps) Scan(incomingValue interface{}) error {
 	valueAsByteSlice, ok := incomingValue.([]byte)

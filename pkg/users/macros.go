@@ -40,15 +40,9 @@ func handleSignUpMacro(user *User) error {
 	return nil
 }
 
-type handleLoginMacroMetadata struct {
-	session UserSession
-	token   string
-}
-
-func handleLoginMacro(
-	user User,
-	params handleLoginParams,
-) (handleLoginMacroMetadata, error) {
+func handleLoginMacro(user User, params handleLoginParams) (
+	handleLoginMacroMetadata, error,
+) {
 	getUserParams := createGetUserParams(params)
 
 	err := UseUsersAPI().GetUserByParam(&user, getUserParams)
@@ -85,7 +79,6 @@ func handleLoginMacro(
 	}
 
 	var userSession UserSession
-
 	isOk := UseSessionsAPI().CreateUserSession(user, &userSession)
 	if !isOk {
 		return handleLoginMacroMetadata{},

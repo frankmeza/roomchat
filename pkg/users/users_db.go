@@ -25,14 +25,6 @@ func saveUserDb(user *User) error {
 	return nil
 }
 
-type GetUserParams struct {
-	Email     string
-	ID        string
-	ParamName string
-	Username  string
-	Uuid      string
-}
-
 func getUserDbByParam(user *User, params GetUserParams) error {
 	dbConn, err := db.GetDbConnection()
 	if err != nil {
