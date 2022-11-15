@@ -8,5 +8,6 @@ func AddAuthenticationActions(echoServer *echo.Echo) {
 	echoServer.POST("/sign_up", handleSignUp)
 	echoServer.POST("/log_in", handleLogin)
 
+	echoServer.GET("users/username/:username", handleGetUser)
 	echoServer.PATCH("/update_user/:user_id", handleUpdateUser)
 }

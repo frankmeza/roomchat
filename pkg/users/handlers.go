@@ -3,9 +3,32 @@ package users
 import (
 	"net/http"
 
+	"github.com/frankmeza/roomchat/pkg/constants"
 	"github.com/frankmeza/roomchat/pkg/response"
 	"github.com/labstack/echo/v4"
 )
+
+func handleGetUser(context echo.Context) error {
+	var user User
+
+	params := GetUserParams{
+		ParamName: constants.USERNAME,
+		Username:  context.Param(constants.USERNAME),
+	}
+
+	err := UseUsersAPI().GetUserByParam(&user, params)
+	if err != nil {
+		return response.HandlerError(context, err, response.HandlerErrorParams{
+			ErrMsg: "handleGetUser GetUserByParam",
+			Status: http.StatusBadRequest,
+		})
+	}
+
+	return response.HandlerSuccess(context, response.HandlerSuccessParams{
+		Payload: &user,
+		Status:  http.StatusOK,
+	})
+}
 
 func handleSignUp(context echo.Context) error {
 	var user User
