@@ -32,6 +32,9 @@ func makeDbMigrations(dbConn *gorm.DB) error {
 
 func addPkgActions(server *echo.Echo, authorizedGroup *echo.Group) {
 	users.AddAuthenticationActions(server)
+
+	// below use /auth as prefix
+	users.AddUserFetchActions(authorizedGroup)
 	connections.AddConnectionActions(authorizedGroup)
 }
 
