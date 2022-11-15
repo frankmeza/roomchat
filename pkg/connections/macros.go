@@ -33,27 +33,25 @@ func handleMakeConnectionMacro(params handleMakeConnectionParams) (
 
 	if len(verifiedUsers) != 2 {
 		return Connection{},
-			errata.CreateError(errors.New(""), errata.ErrMessage{
-				Text: "handleMakeConnectionMacro",
+			errata.CreateError(errors.New(""), []string{
+				"handleMakeConnectionMacro",
 			})
 	}
 
 	err := useConnectionsAPI().SaveMessage(&params.Message)
 	if err != nil {
-		return Connection{},
-			errata.CreateError(err, errata.ErrMessage{
-				Text: "handleMakeConnectionMacro SaveMessage",
-			})
+		return Connection{}, errata.CreateError(err, []string{
+			"handleMakeConnectionMacro SaveMessage",
+		})
 	}
 
 	connection := useConnectionsAPI().CreateConnection(params)
 
 	err = useConnectionsAPI().SaveConnection(&connection)
 	if err != nil {
-		return Connection{},
-			errata.CreateError(err, errata.ErrMessage{
-				Text: "handleMakeConnectionMacro SaveConnection",
-			})
+		return Connection{}, errata.CreateError(err, []string{
+			"handleMakeConnectionMacro SaveConnection",
+		})
 	}
 
 	return connection, nil
@@ -70,8 +68,8 @@ func handleAddMessageMacro(params handleAddMessageParams) error {
 	)
 
 	if err != nil {
-		return errata.CreateError(err, errata.ErrMessage{
-			Text: "handleAddMessageMacro GetConnectionByParam",
+		return errata.CreateError(err, []string{
+			"handleAddMessageMacro GetConnectionByParam",
 		})
 	}
 
@@ -87,8 +85,8 @@ func handleAddMessageMacro(params handleAddMessageParams) error {
 
 	err = useConnectionsAPI().SaveMessage(&newMessage)
 	if err != nil {
-		return errata.CreateError(err, errata.ErrMessage{
-			Text: "handleAddMessageMacro SaveMessage",
+		return errata.CreateError(err, []string{
+			"handleAddMessageMacro SaveMessage",
 		})
 	}
 
@@ -96,8 +94,8 @@ func handleAddMessageMacro(params handleAddMessageParams) error {
 
 	err = useConnectionsAPI().UpdateConnection(&connection)
 	if err != nil {
-		return errata.CreateError(err, errata.ErrMessage{
-			Text: "handleAddMessageMacro UpdateConnection",
+		return errata.CreateError(err, []string{
+			"handleAddMessageMacro UpdateConnection",
 		})
 	}
 

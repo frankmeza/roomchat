@@ -17,8 +17,8 @@ func GeneratePasswordString(plaintext string) (string, error) {
 	)
 
 	if err != nil {
-		return "", errata.CreateError(err, errata.ErrMessage{
-			Text: "GeneratePasswordString bcrypt.GenerateFromPassword",
+		return "", errata.CreateError(err, []string{
+			"GeneratePasswordString GenerateFromPassword",
 		})
 	}
 
@@ -48,7 +48,9 @@ type GenerateTokenStringParams struct {
 	Username string
 }
 
-func GenerateTokenString(params GenerateTokenStringParams) (string, error) {
+func GenerateTokenString(params GenerateTokenStringParams) (
+	string, error,
+) {
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, JwtClaims{
 		IsAdmin: true,
 		Name:    params.Username + params.Password,
@@ -60,8 +62,8 @@ func GenerateTokenString(params GenerateTokenStringParams) (string, error) {
 	)
 
 	if err != nil {
-		return "", errata.CreateError(err, errata.ErrMessage{
-			Text: "GenerateTokenString token.SignedString",
+		return "", errata.CreateError(err, []string{
+			"GenerateTokenString SignedString",
 		})
 	}
 

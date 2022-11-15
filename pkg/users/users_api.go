@@ -22,8 +22,8 @@ func (api UsersAPI) CreateUser(user *User, params CreateUserParams) error {
 
 	err := jsonMap.Decode(user.UserProps, &user.UserProps)
 	if err != nil {
-		return errata.CreateError(err, errata.ErrMessage{
-			Text: "CreateUser Decode",
+		return errata.CreateError(err, []string{
+			"CreateUser Decode",
 		})
 	}
 

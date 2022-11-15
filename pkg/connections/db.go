@@ -17,14 +17,14 @@ func updateConnectionDb(updatedConnection *Connection) error {
 		})
 
 	if err != nil {
-		return errata.CreateError(err, errata.ErrMessage{
-			Text: "updateConnectionDb GetConnectionByParam",
+		return errata.CreateError(err, []string{
+			"updateConnectionDb GetConnectionByParam",
 		})
 	}
 
 	if existingConnection.Uuid != updatedConnection.Uuid {
-		return errata.CreateError(err, errata.ErrMessage{
-			Text: "cannot update connection with this id",
+		return errata.CreateError(err, []string{
+			"cannot update connection with this id",
 		})
 	}
 
@@ -36,15 +36,15 @@ func updateConnectionDb(updatedConnection *Connection) error {
 func saveConnectionDb(connection *Connection) error {
 	dbConn, err := db.GetDbConnection()
 	if err != nil {
-		return errata.CreateError(err, errata.ErrMessage{
-			Text: "saveConnectionDb GetDbConnection",
+		return errata.CreateError(err, []string{
+			"saveConnectionDb GetDbConnection",
 		})
 	}
 
 	result := dbConn.Debug().Create(connection)
 	if result.Error != nil {
-		return errata.CreateError(result.Error, errata.ErrMessage{
-			Text: "saveConnectionDb Create",
+		return errata.CreateError(result.Error, []string{
+			"saveConnectionDb Create",
 		})
 	}
 
@@ -54,24 +54,19 @@ func saveConnectionDb(connection *Connection) error {
 func saveMessageDb(Message *Message) error {
 	dbConn, err := db.GetDbConnection()
 	if err != nil {
-		return errata.CreateError(err, errata.ErrMessage{
-			Text: "saveMessageDb GetDbMessage",
+		return errata.CreateError(err, []string{
+			"saveMessageDb GetDbMessage",
 		})
 	}
 
 	result := dbConn.Debug().Create(Message)
 	if result.Error != nil {
-		return errata.CreateError(result.Error, errata.ErrMessage{
-			Text: "saveMessageDb Create",
+		return errata.CreateError(result.Error, []string{
+			"saveMessageDb Create",
 		})
 	}
 
 	return nil
-}
-
-type getConnectionParams struct {
-	ParamName string
-	Uuid      string
 }
 
 func getParamToUse(params getConnectionParams) string {
@@ -88,15 +83,15 @@ func getConnectionDbByParam(
 ) error {
 	dbConn, err := db.GetDbConnection()
 	if err != nil {
-		return errata.CreateError(err, errata.ErrMessage{
-			Text: "getConnectionDbByParam GetDbConnection",
+		return errata.CreateError(err, []string{
+			"getConnectionDbByParam GetDbConnection",
 		})
 	}
 
 	paramToUse := getParamToUse(params)
 	if paramToUse == "" {
-		return errata.CreateError(err, errata.ErrMessage{
-			Text: "getConnectionDbByParam getParamToUse",
+		return errata.CreateError(err, []string{
+			"getConnectionDbByParam getParamToUse",
 		})
 	}
 
@@ -106,8 +101,8 @@ func getConnectionDbByParam(
 
 	result := dbConn.Debug().Find(&connection, query)
 	if result.Error != nil {
-		return errata.CreateError(result.Error, errata.ErrMessage{
-			Text: "getConnectionDbByParam Find",
+		return errata.CreateError(result.Error, []string{
+			"getConnectionDbByParam Find",
 		})
 	}
 

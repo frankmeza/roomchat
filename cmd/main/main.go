@@ -41,15 +41,15 @@ func makeDbMigrations(dbConn *gorm.DB) error {
 func main() {
 	dbConn, err := db.GetDbConnection()
 	if err != nil {
-		panic(errata.CreateError(err, errata.ErrMessage{
-			Text: "main GetDbConnection",
+		panic(errata.CreateError(err, []string{
+			"main GetDbConnection",
 		}))
 	}
 
 	err = makeDbMigrations(dbConn)
 	if err != nil {
-		panic(errata.CreateError(err, errata.ErrMessage{
-			Text: "main AutoMigrate",
+		panic(errata.CreateError(err, []string{
+			"main AutoMigrate",
 		}))
 	}
 

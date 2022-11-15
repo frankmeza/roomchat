@@ -2,12 +2,13 @@ package errata
 
 import (
 	"fmt"
+	"strings"
 )
 
 type ErrMessage struct {
 	Text string
 }
 
-func CreateError(err error, errMessage ErrMessage) error {
-	return fmt.Errorf(errMessage.Text, "caused error:", err)
+func CreateError(err error, errText []string) error {
+	return fmt.Errorf(strings.Join(errText, "\n"), "caused error:", err)
 }

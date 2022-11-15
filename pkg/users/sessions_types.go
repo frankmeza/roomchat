@@ -31,8 +31,8 @@ type (
 func (userSessionProps *UserSessionProps) Scan(incomingValue interface{}) error {
 	valueAsByteSlice, ok := incomingValue.([]byte)
 	if !ok {
-		return errata.CreateError(errors.New(""), errata.ErrMessage{
-			Text: "UserSessionProps Scan",
+		return errata.CreateError(errors.New(""), []string{
+			"UserSessionProps Scan",
 		})
 	}
 
@@ -42,8 +42,8 @@ func (userSessionProps *UserSessionProps) Scan(incomingValue interface{}) error 
 func (userSessionProps UserSessionProps) Value() (driver.Value, error) {
 	value, err := json.Marshal(&userSessionProps)
 	if err != nil {
-		return nil, errata.CreateError(err, errata.ErrMessage{
-			Text: "UserSessionProps Value",
+		return nil, errata.CreateError(err, []string{
+			"UserSessionProps Value",
 		})
 	}
 

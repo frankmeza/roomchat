@@ -38,6 +38,11 @@ type (
 		apiType string
 	}
 
+	getConnectionParams struct {
+		ParamName string
+		Uuid      string
+	}
+
 	handleAddMessageParams struct {
 		ConnectionUuid string `json:"connection_id"`
 		FromUser       string `json:"from_user"`
@@ -54,8 +59,8 @@ type (
 func (connectionProps *ConnectionProps) Scan(incomingValue interface{}) error {
 	valueAsByteSlice, ok := incomingValue.([]byte)
 	if !ok {
-		return errata.CreateError(errors.New(""), errata.ErrMessage{
-			Text: "ConnectionProps Scan",
+		return errata.CreateError(errors.New(""), []string{
+			"ConnectionProps Scan",
 		})
 	}
 
@@ -65,8 +70,8 @@ func (connectionProps *ConnectionProps) Scan(incomingValue interface{}) error {
 func (connectionProps ConnectionProps) Value() (driver.Value, error) {
 	value, err := json.Marshal(&connectionProps)
 	if err != nil {
-		return nil, errata.CreateError(err, errata.ErrMessage{
-			Text: "ConnectionProps Value",
+		return nil, errata.CreateError(err, []string{
+			"ConnectionProps Value",
 		})
 	}
 
@@ -76,8 +81,8 @@ func (connectionProps ConnectionProps) Value() (driver.Value, error) {
 func (message *Message) Scan(incomingValue interface{}) error {
 	valueAsByteSlice, ok := incomingValue.([]byte)
 	if !ok {
-		return errata.CreateError(errors.New(""), errata.ErrMessage{
-			Text: "Message Scan",
+		return errata.CreateError(errors.New(""), []string{
+			"Message Scan",
 		})
 	}
 
@@ -87,8 +92,8 @@ func (message *Message) Scan(incomingValue interface{}) error {
 func (message Message) Value() (driver.Value, error) {
 	value, err := json.Marshal(&message)
 	if err != nil {
-		return nil, errata.CreateError(err, errata.ErrMessage{
-			Text: "Message Value",
+		return nil, errata.CreateError(err, []string{
+			"Message Value",
 		})
 	}
 
