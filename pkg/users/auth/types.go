@@ -7,6 +7,16 @@ const (
 )
 
 type (
+	CheckPasswordHashParams struct {
+		Hash     string
+		Password string
+	}
+
+	GenerateTokenStringParams struct {
+		Password string
+		Username string
+	}
+
 	JwtClaims struct {
 		Name    string `json:"name"`
 		UUID    string `json:"uuid"`

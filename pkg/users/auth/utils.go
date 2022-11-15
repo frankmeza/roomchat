@@ -25,11 +25,6 @@ func GeneratePasswordString(plaintext string) (string, error) {
 	return string(passwordHash), nil
 }
 
-type CheckPasswordHashParams struct {
-	Hash     string
-	Password string
-}
-
 func CheckPasswordHash(params CheckPasswordHashParams) error {
 	err := bcrypt.CompareHashAndPassword(
 		[]byte(params.Hash),
@@ -41,11 +36,6 @@ func CheckPasswordHash(params CheckPasswordHashParams) error {
 	}
 
 	return nil
-}
-
-type GenerateTokenStringParams struct {
-	Password string
-	Username string
 }
 
 func GenerateTokenString(params GenerateTokenStringParams) (
