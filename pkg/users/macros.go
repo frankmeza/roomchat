@@ -2,8 +2,8 @@ package users
 
 import (
 	appUtils "github.com/frankmeza/roomchat/pkg/app_utils"
+	"github.com/frankmeza/roomchat/pkg/auth"
 	"github.com/frankmeza/roomchat/pkg/errata"
-	"github.com/frankmeza/roomchat/pkg/users/auth"
 )
 
 func handleSignUpMacro(user *User) error {
