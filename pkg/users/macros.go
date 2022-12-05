@@ -79,6 +79,7 @@ func handleLoginMacro(user User, params handleLoginParams) (
 	}
 
 	var userSession UserSession
+
 	isOk := UseSessionsAPI().CreateUserSession(user, &userSession)
 	if !isOk {
 		return handleLoginMacroMetadata{},

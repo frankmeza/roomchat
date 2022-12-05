@@ -22,21 +22,20 @@ func createGetUserParams(params handleLoginParams) GetUserParams {
 }
 
 func getParamToUse(params GetUserParams) string {
-	if params.ParamName == constants.EMAIL {
-		return params.Email
+	var paramToUse string
+
+	switch paramName := params.ParamName; paramName {
+	case constants.EMAIL:
+		paramToUse = params.Email
+	case constants.ID:
+		paramToUse = params.ID
+	case constants.USERNAME:
+		paramToUse = params.Username
+	case constants.UUID:
+		paramToUse = params.Uuid
+	default:
+		paramToUse = ""
 	}
 
-	if params.ParamName == constants.ID {
-		return params.ID
-	}
-
-	if params.ParamName == constants.USERNAME {
-		return params.Username
-	}
-
-	if params.ParamName == constants.UUID {
-		return params.Uuid
-	}
-
-	return ""
+	return paramToUse
 }
