@@ -32,10 +32,9 @@ func handleMakeConnectionMacro(params handleMakeConnectionParams) (
 	}
 
 	if len(verifiedUsers) != 2 {
-		return Connection{},
-			errata.CreateError(errors.New(""), []string{
-				"handleMakeConnectionMacro",
-			})
+		return Connection{}, errata.CreateError(errors.New(""), []string{
+			"handleMakeConnectionMacro",
+		})
 	}
 
 	err := useConnectionsAPI().SaveMessage(&params.Message)
@@ -46,7 +45,6 @@ func handleMakeConnectionMacro(params handleMakeConnectionParams) (
 	}
 
 	connection := useConnectionsAPI().CreateConnection(params)
-
 	err = useConnectionsAPI().SaveConnection(&connection)
 	if err != nil {
 		return Connection{}, errata.CreateError(err, []string{

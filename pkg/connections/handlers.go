@@ -1,6 +1,7 @@
 package connections
 
 import (
+	"errors"
 	"net/http"
 
 	"github.com/frankmeza/roomchat/pkg/response"
@@ -12,23 +13,25 @@ func handleMakeConnection(context echo.Context) error {
 
 	err := context.Bind(&params)
 	if err != nil {
-		return response.HandlerError(context, err, response.HandlerErrorParams{
-			ErrMsg: "handleMakeConnection context.Bind",
+		return response.SendResponse(context, response.Response{
+			Error:  errors.New("handleMakeConnection Bind"),
 			Status: http.StatusBadRequest,
 		})
 	}
 
 	connection, err := handleMakeConnectionMacro(params)
 	if err != nil {
-		return response.HandlerError(context, err, response.HandlerErrorParams{
-			ErrMsg: "handleMakeConnection handleMakeConnectionMacro",
+		return response.SendResponse(context, response.Response{
+			Error:  errors.New("handleMakeConnection handleMakeConnectionMacro"),
 			Status: http.StatusBadRequest,
 		})
 	}
 
-	return response.HandlerSuccess(context, response.HandlerSuccessParams{
-		Payload: connection,
-		Status:  http.StatusOK,
+	return response.SendResponse(context, response.Response{
+		Payload: map[string]interface{}{
+			"connection": connection,
+		},
+		Status: http.StatusOK,
 	})
 }
 
@@ -37,16 +40,16 @@ func handleAddMessage(context echo.Context) error {
 
 	err := context.Bind(&params)
 	if err != nil {
-		return response.HandlerError(context, err, response.HandlerErrorParams{
-			ErrMsg: "handleAddMessage context.Bind",
+		return response.SendResponse(context, response.Response{
+			Error:  errors.New("handleAddMessage Bind"),
 			Status: http.StatusBadRequest,
 		})
 	}
 
 	err = handleAddMessageMacro(params)
 	if err != nil {
-		return response.HandlerError(context, err, response.HandlerErrorParams{
-			ErrMsg: "handleAddMessage handleAddMessageMacro",
+		return response.SendResponse(context, response.Response{
+			Error:  errors.New("handleAddMessage handleAddMessageMacro"),
 			Status: http.StatusBadRequest,
 		})
 	}
