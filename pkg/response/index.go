@@ -13,7 +13,7 @@ type Response struct {
 }
 
 func SendResponse(context echo.Context, params Response) error {
-	if params.Error.Error() != "" {
+	if params.Error != nil {
 		error := fmt.Sprintf("error caused by: %s", params.Error.Error())
 
 		return context.JSON(params.Status, map[string]string{
