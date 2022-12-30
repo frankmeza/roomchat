@@ -2,6 +2,7 @@ package main
 
 import (
 	"flag"
+	"net/http"
 	"os"
 
 	"github.com/frankmeza/roomchat/pkg/auth"
@@ -73,7 +74,13 @@ func main() {
 	}
 
 	authorizedGroup.Use(middleware.JWTWithConfig(config))
-	addPkgActions(echoServer, authorizedGroup)
 
+	echoServer.GET("/", func(context echo.Context) error {
+		return context.JSON(http.StatusOK, map[string]bool{
+			"oh health yeah": true,
+		})
+	})
+
+	addPkgActions(echoServer, authorizedGroup)
 	echoServer.Logger.Fatal(echoServer.Start(HOST_AND_PORT))
 }
