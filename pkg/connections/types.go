@@ -57,8 +57,8 @@ type (
 
 // from https://gorm.io/docs/data_types.html#Implements-Customized-Data-Type
 func (connectionProps *ConnectionProps) Scan(incomingValue interface{}) error {
-	valueAsByteSlice, ok := incomingValue.([]byte)
-	if !ok {
+	valueAsByteSlice, isOk := incomingValue.([]byte)
+	if !isOk {
 		return errata.CreateError(errors.New(""), []string{
 			"ConnectionProps Scan",
 		})
@@ -79,8 +79,8 @@ func (connectionProps ConnectionProps) Value() (driver.Value, error) {
 }
 
 func (message *Message) Scan(incomingValue interface{}) error {
-	valueAsByteSlice, ok := incomingValue.([]byte)
-	if !ok {
+	valueAsByteSlice, isOk := incomingValue.([]byte)
+	if !isOk {
 		return errata.CreateError(errors.New(""), []string{
 			"Message Scan",
 		})

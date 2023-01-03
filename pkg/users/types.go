@@ -7,6 +7,7 @@ import (
 
 	"github.com/frankmeza/roomchat/pkg/db"
 	"github.com/frankmeza/roomchat/pkg/errata"
+	"github.com/frankmeza/roomchat/pkg/sessions"
 )
 
 type (
@@ -39,7 +40,7 @@ type (
 	}
 
 	handleLoginMacroMetadata struct {
-		session UserSession
+		session sessions.Session
 		token   string
 	}
 
@@ -56,8 +57,8 @@ type (
 
 // from https://gorm.io/docs/data_types.html#Implements-Customized-Data-Type
 func (userProps *UserProps) Scan(incomingValue interface{}) error {
-	valueAsByteSlice, ok := incomingValue.([]byte)
-	if !ok {
+	valueAsByteSlice, isOk := incomingValue.([]byte)
+	if !isOk {
 		return errata.CreateError(errors.New(""), []string{
 			"UserProps Scan",
 		})

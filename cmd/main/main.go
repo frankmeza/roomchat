@@ -10,6 +10,7 @@ import (
 	"github.com/frankmeza/roomchat/pkg/constants"
 	"github.com/frankmeza/roomchat/pkg/db"
 	"github.com/frankmeza/roomchat/pkg/errata"
+	"github.com/frankmeza/roomchat/pkg/sessions"
 	"github.com/frankmeza/roomchat/pkg/users"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
@@ -35,7 +36,7 @@ func makeDbMigrations(dbConn *gorm.DB) error {
 
 		// users
 		&users.User{},
-		&users.UserSession{},
+		&sessions.Session{},
 	)
 }
 

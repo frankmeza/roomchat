@@ -4,6 +4,7 @@ import (
 	appUtils "github.com/frankmeza/roomchat/pkg/app_utils"
 	"github.com/frankmeza/roomchat/pkg/auth"
 	"github.com/frankmeza/roomchat/pkg/errata"
+	"github.com/frankmeza/roomchat/pkg/sessions"
 )
 
 func handleSignUpMacro(user *User) error {
@@ -78,9 +79,18 @@ func handleLoginMacro(user User, params handleLoginParams) (
 			})
 	}
 
-	var userSession UserSession
+	var session sessions.Session
 
-	isOk := UseSessionsAPI().CreateUserSession(user, &userSession)
+	sessionParams := sessions.CreateSessionParams{
+		Location: user.UserProps.Location,
+		Uuid:     user.UserProps.Uuid,
+	}
+
+	isOk := sessions.UseSessionsAPI().CreateSession(
+		sessionParams,
+		&session,
+	)
+
 	if !isOk {
 		return handleLoginMacroMetadata{},
 			errata.CreateError(err, []string{
@@ -88,16 +98,16 @@ func handleLoginMacro(user User, params handleLoginParams) (
 			})
 	}
 
-	err = UseSessionsAPI().SaveUserSession(userSession)
+	err = sessions.UseSessionsAPI().SaveSession(session)
 	if err != nil {
 		return handleLoginMacroMetadata{},
 			errata.CreateError(err, []string{
-				"handleLoginMacro SaveUserSession",
+				"handleLoginMacro SaveSession",
 			})
 	}
 
 	return handleLoginMacroMetadata{
-		session: userSession,
+		session: session,
 		token:   tokenString,
 	}, nil
 }
