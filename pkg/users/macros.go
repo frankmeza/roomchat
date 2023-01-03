@@ -41,14 +41,12 @@ func handleSignUpMacro(user *User) error {
 	return nil
 }
 
-func handleLoginMacro(user User, params handleLoginParams) (
-	handleLoginMacroMetadata, error,
-) {
+func handleLoginMacro(user User, params loginParams) (loginMacroMetadata, error) {
 	getUserParams := createGetUserParams(params)
 
 	err := UseUsersAPI().GetUserByParam(&user, getUserParams)
 	if err != nil {
-		return handleLoginMacroMetadata{},
+		return loginMacroMetadata{},
 			errata.CreateError(err, []string{
 				"handleLoginMacro GetUserByParam",
 			})
@@ -60,7 +58,7 @@ func handleLoginMacro(user User, params handleLoginParams) (
 	})
 
 	if err != nil {
-		return handleLoginMacroMetadata{},
+		return loginMacroMetadata{},
 			errata.CreateError(err, []string{
 				"handleLoginMacro CheckPasswordHash doesn't match",
 			})
@@ -73,7 +71,7 @@ func handleLoginMacro(user User, params handleLoginParams) (
 		})
 
 	if err != nil {
-		return handleLoginMacroMetadata{},
+		return loginMacroMetadata{},
 			errata.CreateError(err, []string{
 				"handleLoginMacro GeneratePasswordString",
 			})
@@ -81,7 +79,7 @@ func handleLoginMacro(user User, params handleLoginParams) (
 
 	var session sessions.Session
 
-	sessionParams := sessions.CreateSessionParams{
+	sessionParams := sessions.SessionParams{
 		Location: user.UserProps.Location,
 		Uuid:     user.UserProps.Uuid,
 	}
@@ -92,7 +90,7 @@ func handleLoginMacro(user User, params handleLoginParams) (
 	)
 
 	if !isOk {
-		return handleLoginMacroMetadata{},
+		return loginMacroMetadata{},
 			errata.CreateError(err, []string{
 				"handleLoginMacro GeneratePasswordString",
 			})
@@ -100,13 +98,13 @@ func handleLoginMacro(user User, params handleLoginParams) (
 
 	err = sessions.UseSessionsAPI().SaveSession(session)
 	if err != nil {
-		return handleLoginMacroMetadata{},
+		return loginMacroMetadata{},
 			errata.CreateError(err, []string{
 				"handleLoginMacro SaveSession",
 			})
 	}
 
-	return handleLoginMacroMetadata{
+	return loginMacroMetadata{
 		session: session,
 		token:   tokenString,
 	}, nil

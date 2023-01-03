@@ -27,7 +27,7 @@ type (
 		apiType string
 	}
 
-	CreateSessionParams struct {
+	SessionParams struct {
 		Location string
 		Uuid     string
 	}

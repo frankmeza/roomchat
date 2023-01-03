@@ -4,7 +4,7 @@ import (
 	"github.com/frankmeza/roomchat/pkg/constants"
 )
 
-func createGetUserParams(params handleLoginParams) GetUserParams {
+func createGetUserParams(params loginParams) GetUserParams {
 	getUserParams := GetUserParams{
 		Email:    params.Email,
 		Username: params.Username,

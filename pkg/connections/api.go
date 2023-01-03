@@ -17,7 +17,7 @@ func (api ConnectionsAPI) UpdateConnection(connection *Connection) error {
 }
 
 func (api ConnectionsAPI) CreateConnection(
-	params handleMakeConnectionParams,
+	params createConnectionParams,
 ) Connection {
 	uuidString := appUtils.CreateUuid()
 

@@ -61,7 +61,7 @@ func handleSignUp(context echo.Context) error {
 }
 
 func handleLogin(context echo.Context) error {
-	var params handleLoginParams
+	var params loginParams
 	var user User
 
 	err := context.Bind(&params)

@@ -39,12 +39,12 @@ type (
 		Uuid      string
 	}
 
-	handleLoginMacroMetadata struct {
+	loginMacroMetadata struct {
 		session sessions.Session
 		token   string
 	}
 
-	handleLoginParams struct {
+	loginParams struct {
 		Email    string `json:"email"`
 		Password string `json:"password"`
 		Username string `json:"username"`

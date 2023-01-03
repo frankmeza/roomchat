@@ -43,13 +43,13 @@ type (
 		Uuid      string
 	}
 
-	handleAddMessageParams struct {
+	addMessageParams struct {
 		ConnectionUuid string `json:"connection_id"`
 		FromUser       string `json:"from_user"`
 		Text           string `json:"text"`
 	}
 
-	handleMakeConnectionParams struct {
+	createConnectionParams struct {
 		Message  Message `json:"message"`
 		Location string  `json:"location"`
 	}

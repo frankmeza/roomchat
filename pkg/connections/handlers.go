@@ -9,7 +9,7 @@ import (
 )
 
 func handleMakeConnection(context echo.Context) error {
-	var params handleMakeConnectionParams
+	var params createConnectionParams
 
 	err := context.Bind(&params)
 	if err != nil {
@@ -36,7 +36,7 @@ func handleMakeConnection(context echo.Context) error {
 }
 
 func handleAddMessage(context echo.Context) error {
-	var params handleAddMessageParams
+	var params addMessageParams
 
 	err := context.Bind(&params)
 	if err != nil {

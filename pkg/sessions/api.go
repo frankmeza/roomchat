@@ -9,7 +9,7 @@ func UseSessionsAPI() SessionsAPI {
 }
 
 func (api SessionsAPI) CreateSession(
-	params CreateSessionParams,
+	params SessionParams,
 	session *Session,
 ) bool {
 	*session = Session{
