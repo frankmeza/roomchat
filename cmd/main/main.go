@@ -17,8 +17,10 @@ import (
 	"gorm.io/gorm"
 )
 
+const FLAG_DEFAULT_VALUE int = 0
+const FLAG_MESSAGE string = "append -dev 1 to start server on :9990"
+const FLAG_NAME string = "dev"
 const HOST_AND_PORT string = "127.0.0.1:9990"
-const START_DEV_MESSAGE string = "append -dev 1 to start locally "
 
 func addPkgActions(server *echo.Echo, authorizedGroup *echo.Group) {
 	users.AddAuthenticationActions(server)
@@ -55,7 +57,7 @@ func main() {
 		}))
 	}
 
-	envFlag := flag.Int("dev", 0, START_DEV_MESSAGE+HOST_AND_PORT)
+	envFlag := flag.Int(FLAG_NAME, FLAG_DEFAULT_VALUE, FLAG_MESSAGE)
 
 	flag.Parse()
 	isDev := *envFlag == 1
@@ -76,7 +78,7 @@ func main() {
 
 	authorizedGroup.Use(middleware.JWTWithConfig(config))
 
-	echoServer.GET("/", func(context echo.Context) error {
+	echoServer.GET("/health", func(context echo.Context) error {
 		return context.JSON(http.StatusOK, map[string]bool{
 			"oh health yeah": true,
 		})
