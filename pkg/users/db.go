@@ -25,17 +25,17 @@ func saveUserDb(user *User) error {
 	return nil
 }
 
-func getUserDbByParam(user *User, params GetUserParams) error {
+func getUserDbByParam(user *User, params GetUserParams) (UserProps, error) {
 	dbConn, err := db.GetDbConnection()
 	if err != nil {
-		return errata.CreateError(err, []string{
+		return UserProps{}, errata.CreateError(err, []string{
 			"getUserDbByParam GetDbConnection",
 		})
 	}
 
 	paramToUse := getParamToUse(params)
 	if paramToUse == "" {
-		return errata.CreateError(err, []string{
+		return UserProps{}, errata.CreateError(err, []string{
 			"getUserDbByParam getParamToUse",
 		})
 	}
@@ -46,10 +46,10 @@ func getUserDbByParam(user *User, params GetUserParams) error {
 
 	result := dbConn.Debug().Find(user, query)
 	if result.Error != nil {
-		return errata.CreateError(result.Error, []string{
+		return UserProps{}, errata.CreateError(result.Error, []string{
 			"getUserDbByParam Find",
 		})
 	}
 
-	return nil
+	return user.UserProps, nil
 }

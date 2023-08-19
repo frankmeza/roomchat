@@ -17,7 +17,7 @@ func handleGetUser(context echo.Context) error {
 		Username:  context.Param(constants.USERNAME),
 	}
 
-	err := UseUsersAPI().GetUserByParam(&user, params)
+	fetchedUser, err := UseUsersAPI().GetUserByParam(&user, params)
 	if err != nil {
 		return response.SendResponse(context, response.Response{
 			Error:  errors.New("handleGetUser GetUserByParam"),
@@ -27,7 +27,7 @@ func handleGetUser(context echo.Context) error {
 
 	return response.SendResponse(context, response.Response{
 		Payload: map[string]interface{}{
-			"user": user,
+			"user": fetchedUser,
 		},
 		Status: http.StatusOK,
 	})

@@ -38,6 +38,13 @@ func (api UsersAPI) UpdateUser(user *User) error {
 	return saveUserDb(user)
 }
 
-func (api UsersAPI) GetUserByParam(user *User, params GetUserParams) error {
-	return getUserDbByParam(user, params)
+func (api UsersAPI) GetUserByParam(user *User, params GetUserParams) (UserProps, error) {
+	fetchedUser, err := getUserDbByParam(user, params)
+	if err != nil {
+		return UserProps{}, errata.CreateError(err, []string{
+			"GetUserByParam getUserDbByParam",
+		})
+	}
+
+	return fetchedUser, nil
 }

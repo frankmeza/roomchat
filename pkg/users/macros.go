@@ -47,7 +47,7 @@ func handleLoginMacro(
 ) (loginMacroMetadata, error) {
 	getUserParams := createGetUserParams(params)
 
-	err := UseUsersAPI().GetUserByParam(&user, getUserParams)
+	fetchedUser, err := UseUsersAPI().GetUserByParam(&user, getUserParams)
 	if err != nil {
 		return loginMacroMetadata{},
 			errata.CreateError(err, []string{
@@ -56,7 +56,7 @@ func handleLoginMacro(
 	}
 
 	err = auth.CheckPasswordHash(auth.CheckPasswordHashParams{
-		Hash:     user.UserProps.Password,
+		Hash:     fetchedUser.Password,
 		Password: params.Password,
 	})
 
@@ -83,8 +83,8 @@ func handleLoginMacro(
 	var session sessions.Session
 
 	sessionParams := sessions.SessionParams{
-		Location: user.UserProps.Location,
-		Uuid:     user.UserProps.Uuid,
+		Location: fetchedUser.Location,
+		Uuid:     fetchedUser.Uuid,
 	}
 
 	isOk := sessions.UseSessionsAPI().CreateSession(

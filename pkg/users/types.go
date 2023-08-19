@@ -56,6 +56,7 @@ type (
 )
 
 // from https://gorm.io/docs/data_types.html#Implements-Customized-Data-Type
+
 func (userProps *UserProps) Scan(incomingValue interface{}) error {
 	valueAsByteSlice, isOk := incomingValue.([]byte)
 	if !isOk {
