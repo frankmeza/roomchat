@@ -41,10 +41,7 @@ func handleSignUpMacro(user *User) error {
 	return nil
 }
 
-func handleLoginMacro(
-	user User,
-	params loginParams,
-) (loginMacroMetadata, error) {
+func handleLoginMacro(user User, params loginParams) (loginMacroMetadata, error) {
 	getUserParams := createGetUserParams(params)
 
 	fetchedUser, err := UseUsersAPI().GetUserByParam(&user, getUserParams)

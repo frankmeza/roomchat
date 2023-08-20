@@ -38,9 +38,7 @@ func CheckPasswordHash(params CheckPasswordHashParams) error {
 	return nil
 }
 
-func GenerateTokenString(params GenerateTokenStringParams) (
-	string, error,
-) {
+func GenerateTokenString(params GenerateTokenStringParams) (string, error) {
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, JwtClaims{
 		IsAdmin: true,
 		Name:    params.Username + params.Password,
